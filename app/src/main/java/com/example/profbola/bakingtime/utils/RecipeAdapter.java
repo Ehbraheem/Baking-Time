@@ -11,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.profbola.bakingtime.R;
+import com.example.profbola.bakingtime.models.Recipe;
+
+import java.util.List;
 
 
 /**
@@ -20,6 +23,7 @@ import com.example.profbola.bakingtime.R;
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
     private final Context mContext;
+    private List<Recipe> mRecipes;
 
     public RecipeAdapter(@NonNull Context context) {
         mContext = context;
@@ -41,15 +45,19 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mRecipes.size();
+    }
+
+    public void swapRecipes(List<Recipe> recipes) {
+        mRecipes = recipes;
     }
 
     public class RecipeViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener  {
 
-        public final TextView mTitleView;
-        public final TextView mServingsView;
-        public final ImageView mRecipeImage;
+        private final TextView mTitleView;
+        private final TextView mServingsView;
+        private final ImageView mRecipeImage;
 
         public RecipeViewHolder(View view) {
             super(view);
@@ -67,7 +75,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         }
 
         void bind(Recipe recipe) {
-            mTitleView.setText(recipe.title);
+            mTitleView.setText(recipe.name);
             mServingsView.setText(recipe.servings);
             int id = mContext.getResources().getIdentifier(recipe.image, "drawable", mContext.getPackageName());
             mRecipeImage.setImageResource(id);
