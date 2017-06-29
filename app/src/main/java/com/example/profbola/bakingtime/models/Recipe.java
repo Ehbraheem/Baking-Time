@@ -19,7 +19,7 @@ public class Recipe {
 
     public Recipe(JSONObject object) throws JSONException {
         name = object.getString(NAME_KEY);
-        image = object.get(IMAGE_KEY).equals("") ? name.toLowerCase() : object.getString(IMAGE_KEY);
+        image = object.get(IMAGE_KEY).equals("") ? name.replaceAll("\\s", "_").toLowerCase() : object.getString(IMAGE_KEY);
         servings = object.getString(SERVINGS_KEY);
     }
 }

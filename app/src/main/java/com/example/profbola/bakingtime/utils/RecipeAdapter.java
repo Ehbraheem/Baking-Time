@@ -45,11 +45,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     @Override
     public int getItemCount() {
+        if (mRecipes == null) return 0;
         return mRecipes.size();
     }
 
     public void swapRecipes(List<Recipe> recipes) {
         mRecipes = recipes;
+        notifyDataSetChanged();
     }
 
     public class RecipeViewHolder extends RecyclerView.ViewHolder
