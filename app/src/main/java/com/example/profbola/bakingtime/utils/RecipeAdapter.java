@@ -1,6 +1,7 @@
 package com.example.profbola.bakingtime.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.profbola.bakingtime.R;
 import com.example.profbola.bakingtime.models.Recipe;
+import com.example.profbola.bakingtime.ui.RecipeDetailActivity;
 
 import java.util.List;
 
@@ -61,6 +63,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         private final TextView mServingsView;
         private final ImageView mRecipeImage;
 
+        private Recipe mRecipe;
+
         public RecipeViewHolder(View view) {
             super(view);
 
@@ -68,15 +72,21 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             mRecipeImage = (ImageView) view.findViewById(R.id.recipe_image);
             mServingsView = (TextView) view.findViewById(R.id.recipe_servings);
 
+            view.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             Snackbar.make(v, "Congrats!!! You Just Clicked a cake!!!! Stay tuned for how to bake!!!", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
+            Intent transportIntent = new Intent(mContext, RecipeDetailActivity.class);
+            transportIntent.putExtra("NAME", mRecipe);
+            mContext.startActivity(transportIntent);
         }
 
         void bind(Recipe recipe) {
+            mRecipe = recipe;
+
             mTitleView.setText(recipe.name);
             mServingsView.setText(recipe.servings);
             int id = mContext.getResources().getIdentifier(recipe.image, "drawable", mContext.getPackageName());
