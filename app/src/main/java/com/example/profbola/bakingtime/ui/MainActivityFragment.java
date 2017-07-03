@@ -39,7 +39,7 @@ public class MainActivityFragment extends Fragment
 
     private List<Recipe> mRecipes;
 
-    public static final String RECIPES_KEY = "recipes_key";
+    private static final String RECIPES_KEY = "recipes_key";
 
     private static final int LOADER_ID = 456;
 
