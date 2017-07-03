@@ -1,6 +1,8 @@
 package com.example.profbola.bakingtime.ui;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.health.PackageHealthStats;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,7 +25,13 @@ public class StepsFragment extends Fragment {
     private StepAdapter mAdapter;
     private Step[] mSteps;
 
-    public static final String STEPS_KEY = "steps_key";
+    private static final String STEPS_KEY = "steps_key";
+
+    OnVideoPlayerSelected mCallback;
+
+    public interface OnVideoPlayerSelected {
+        void videoClicked(Step step);
+    }
 
     public StepsFragment() {
     }
@@ -43,7 +51,7 @@ public class StepsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_steps_listing, container, false);
 
         mStepsListing = (RecyclerView) view.findViewById(R.id.steps_listing);
-        setUpIngredientView();
+        setUpStepView();
 
         return view;
     }
@@ -53,8 +61,20 @@ public class StepsFragment extends Fragment {
         outState.putParcelableArray(STEPS_KEY, mSteps);
     }
 
-    private void setUpIngredientView() {
-        mAdapter = new StepAdapter(getContext());
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            mCallback = (OnVideoPlayerSelected) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+            + " must implement OnVideoPlayerSelected");
+        }
+    }
+
+    private void setUpStepView() {
+        mAdapter = new StepAdapter(getContext(), (OnVideoPlayerSelected) getActivity());
         mStepsListing.setAdapter(mAdapter);
         mAdapter.swapSteps(mSteps);
         mStepsListing.setLayoutManager(new LinearLayoutManager(getContext()));
