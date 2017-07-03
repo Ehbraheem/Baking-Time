@@ -1,5 +1,6 @@
 package com.example.profbola.bakingtime.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,7 +24,13 @@ public class IngredientsFragment extends Fragment {
     private IngredientAdapter mAdapter;
     private Ingredient[] mIngredients;
 
-    public static final String INGREDIENT_KEY = "ingredients_key";
+    private static final String INGREDIENT_KEY = "ingredients_key";
+
+    OnIngredientSelected mCallback;
+
+    public interface OnIngredientSelected {
+        void ingredientClicked(Ingredient ingredient);
+    }
 
     public IngredientsFragment() {
     }
@@ -53,12 +60,26 @@ public class IngredientsFragment extends Fragment {
         outState.putParcelableArray(INGREDIENT_KEY, mIngredients);
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            mCallback = (OnIngredientSelected) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnIngredientSelected");
+        }
+    }
+
+
+
     private void setUpIngredientView() {
-        mAdapter = new IngredientAdapter(getContext(), mIngredients);
+        mAdapter = new IngredientAdapter(getContext(), (OnIngredientSelected) getContext());
         mIngredientListing.setAdapter(mAdapter);
         mIngredientListing.setLayoutManager(new LinearLayoutManager(getContext()));
         mIngredientListing.setHasFixedSize(true);
-//        mAdapter.swapIngredients(mIngredients);
+        mAdapter.swapIngredients(mIngredients);
     }
 
     public void addData(Ingredient[] ingredients) {
