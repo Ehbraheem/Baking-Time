@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.profbola.bakingtime.R;
 import com.example.profbola.bakingtime.models.Step;
+import com.example.profbola.bakingtime.ui.StepsFragment;
 
 /**
  * Created by prof.BOLA on 7/2/2017.
@@ -18,9 +19,11 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepViewHolder
 
     private Context mContext;
     private Step[] mSteps;
+    private StepsFragment.OnVideoPlayerSelected mCallback;
 
-    public StepAdapter(Context context) {
+    public StepAdapter(Context context, StepsFragment.OnVideoPlayerSelected playerSelected) {
         mContext = context;
+        mCallback = playerSelected;
     }
 
     @Override
@@ -42,22 +45,32 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepViewHolder
         return mSteps.length;
     }
 
-    public class StepViewHolder extends RecyclerView.ViewHolder {
+    public class StepViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
 
         private final TextView id;
         private final TextView description;
+
+        private Step mStep;
 
         public StepViewHolder(View itemView) {
             super(itemView);
 
             id = (TextView) itemView.findViewById(R.id.step_id);
             description = (TextView) itemView.findViewById(R.id.step_description);
+
+            itemView.setOnClickListener(this);
         }
 
         void bind(int position) {
-            Step step = mSteps[position];
-            id.setText(String.valueOf(step.id));
-            description.setText(step.description);
+            mStep = mSteps[position];
+            id.setText(String.valueOf(mStep.id));
+            description.setText(mStep.description);
+        }
+
+        @Override
+        public void onClick(View v) {
+            mCallback.videoClicked(mStep);
         }
     }
 
