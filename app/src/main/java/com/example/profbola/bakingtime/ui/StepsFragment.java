@@ -23,6 +23,8 @@ public class StepsFragment extends Fragment {
     private StepAdapter mAdapter;
     private Step[] mSteps;
 
+    public static final String STEPS_KEY = "steps_key";
+
     public StepsFragment() {
     }
 
@@ -34,12 +36,21 @@ public class StepsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        if (savedInstanceState != null) {
+            mSteps = (Step[]) savedInstanceState.getParcelableArray(STEPS_KEY);
+        }
         View view = inflater.inflate(R.layout.fragment_steps_listing, container, false);
 
         mStepsListing = (RecyclerView) view.findViewById(R.id.steps_listing);
         setUpIngredientView();
 
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArray(STEPS_KEY, mSteps);
     }
 
     private void setUpIngredientView() {

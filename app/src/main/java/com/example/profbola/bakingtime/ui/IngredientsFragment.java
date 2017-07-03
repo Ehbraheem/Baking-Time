@@ -23,6 +23,8 @@ public class IngredientsFragment extends Fragment {
     private IngredientAdapter mAdapter;
     private Ingredient[] mIngredients;
 
+    public static final String INGREDIENT_KEY = "ingredients_key";
+
     public IngredientsFragment() {
     }
 
@@ -34,12 +36,21 @@ public class IngredientsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        if (savedInstanceState != null) {
+            mIngredients = (Ingredient[]) savedInstanceState.getParcelableArray(INGREDIENT_KEY);
+        }
         View view = inflater.inflate(R.layout.fragment_ingredients_listing, container, false);
 
         mIngredientListing = (RecyclerView) view.findViewById(R.id.ingredients_listing);
         setUpIngredientView();
 
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArray(INGREDIENT_KEY, mIngredients);
     }
 
     private void setUpIngredientView() {

@@ -1,6 +1,7 @@
 package com.example.profbola.bakingtime.ui;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -22,6 +23,7 @@ import com.example.profbola.bakingtime.utils.RecipeParser;
 
 import org.json.JSONArray;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,6 +36,10 @@ public class MainActivityFragment extends Fragment
     private RecyclerView mRecipeListView;
     private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
+
+    private List<Recipe> mRecipes;
+
+    public static final String RECIPES_KEY = "recipes_key";
 
     private static final int LOADER_ID = 456;
 
@@ -49,11 +55,21 @@ public class MainActivityFragment extends Fragment
         mErrorMessageDisplay = (TextView) view.findViewById(R.id.tv_error_message_display);
         mLoadingIndicator = (ProgressBar) view.findViewById(R.id.pb_loading_indicator);
 
+        if (savedInstanceState != null) {
+            mRecipes = savedInstanceState.getParcelableArrayList(RECIPES_KEY);
+        } else {
+            getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+        }
+
         setUpRecipeList(view);
 
-        getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
 
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(RECIPES_KEY, (ArrayList<? extends Parcelable>) mRecipes);
     }
 
     private void setUpRecipeList(View view) {
@@ -62,6 +78,7 @@ public class MainActivityFragment extends Fragment
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(context, 2);
         mRecipeListView.setLayoutManager(layoutManager);
         mRecipeAdapter = new RecipeAdapter(context);
+        mRecipeAdapter.swapRecipes(mRecipes);
         mRecipeListView.setAdapter(mRecipeAdapter);
         mRecipeListView.setHasFixedSize(true);
     }
@@ -99,8 +116,8 @@ public class MainActivityFragment extends Fragment
     public void onLoadFinished(Loader<JSONArray> loader, JSONArray data) {
         mLoadingIndicator.setVisibility(View.INVISIBLE);
         if (null != data) {
-            List<Recipe> recipes = RecipeParser.parse(data);
-            mRecipeAdapter.swapRecipes(recipes);
+            mRecipes = RecipeParser.parse(data);
+            mRecipeAdapter.swapRecipes(mRecipes);
             showRecipeList();
         } else {
             showErrorMessage();

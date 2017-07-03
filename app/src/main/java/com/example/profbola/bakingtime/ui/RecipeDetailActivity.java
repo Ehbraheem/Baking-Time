@@ -24,10 +24,22 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
+    private IngredientsFragment mIngredientsFragment;
+    private StepsFragment mStepsFragment;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recipe_detail_activity);
+
+        if (savedInstanceState == null) {
+            Recipe recipe = (Recipe) getIntent().getExtras().get("NAME");
+            mIngredientsFragment = new IngredientsFragment();
+            mIngredientsFragment.addData(recipe.ingredients);
+
+            mStepsFragment = new StepsFragment();
+            mStepsFragment.addData(recipe.steps);
+        }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -35,23 +47,16 @@ public class RecipeDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
-
-        Recipe recipe = (Recipe) getIntent().getExtras().get("NAME");
-        setUpViewPager(recipe);
+        setUpViewPager(mIngredientsFragment, mStepsFragment);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager, true);
 
     }
 
-    private void setUpViewPager(Recipe recipe) {
+    private void setUpViewPager(IngredientsFragment ingredientsFragment, StepsFragment stepsFragment) {
         RecipePagerAdapter adapter = new RecipePagerAdapter(getSupportFragmentManager());
         //TODO: Add the fragments
-        IngredientsFragment ingredientsFragment = new IngredientsFragment();
-        ingredientsFragment.addData(recipe.ingredients);
-
-        StepsFragment stepsFragment = new StepsFragment();
-        stepsFragment.addData(recipe.steps);
 
         adapter.addFragment(ingredientsFragment, INGREDIENT_TAB);
         adapter.addFragment(stepsFragment, STEP_TAB);
