@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.profbola.bakingtime.R;
 import com.example.profbola.bakingtime.models.Ingredient;
+import com.example.profbola.bakingtime.ui.IngredientsFragment;
 
 /**
  * Created by prof.BOLA on 7/2/2017.
@@ -18,10 +19,11 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
 
     private Context mContext;
     private Ingredient[] mIngredients;
+    private IngredientsFragment.OnIngredientSelected mCallback;
 
-    public IngredientAdapter(Context context, Ingredient[] ingredients) {
+    public IngredientAdapter(Context context, IngredientsFragment.OnIngredientSelected callback) {
         mContext = context;
-        mIngredients = ingredients;
+        mCallback = callback;
     }
 
     @Override
@@ -34,8 +36,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
 
     @Override
     public void onBindViewHolder(IngredientViewHolder holder, int position) {
-        Ingredient ingredient = mIngredients[position];
-        holder.bind(ingredient);
+        holder.bind(position);
     }
 
     @Override
@@ -44,11 +45,14 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
         return mIngredients.length;
     }
 
-    public class IngredientViewHolder extends RecyclerView.ViewHolder {
+    public class IngredientViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
 
-        public final TextView name;
-        public final TextView quantity;
-        public final TextView measure;
+        private final TextView name;
+        private final TextView quantity;
+        private final TextView measure;
+
+        private Ingredient mIngredient;
 
         public IngredientViewHolder(View itemView) {
             super(itemView);
@@ -56,12 +60,20 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
             name = (TextView) itemView.findViewById(R.id.ingredient_name);
             quantity = (TextView) itemView.findViewById(R.id.ingredient_quantity);
             measure = (TextView) itemView.findViewById(R.id.ingredient_measure);
+
+            itemView.setOnClickListener(this);
         }
 
-        void bind(Ingredient ingredient) {
-            name.setText(ingredient.ingredient);
-            quantity.setText(String.valueOf(ingredient.quantity));
-            measure.setText(ingredient.measure);
+        void bind(int position) {
+            mIngredient = mIngredients[position];
+            name.setText(mIngredient.ingredient);
+            quantity.setText(String.valueOf(mIngredient.quantity));
+            measure.setText(mIngredient.measure);
+        }
+
+        @Override
+        public void onClick(View v) {
+            mCallback.ingredientClicked(mIngredient);
         }
     }
 
