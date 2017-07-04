@@ -7,4 +7,10 @@
     <string name="error_message">
         An error has occurred. Please try again by clicking REFRESH
     </string>
+
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="rewind">Rewind</string>
+    <string name="ff">Fast Foward</string>
+    <string name="notification_text">Press play to to see the Step!</string>
 </resources>
