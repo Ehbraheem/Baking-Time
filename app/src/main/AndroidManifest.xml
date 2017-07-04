@@ -31,6 +31,11 @@
         <activity android:name=".ui.FullDetailActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".ui.RecipeDetailActivity"></activity>
+        <receiver android:name=".ui.FullDetailsFragment$MediaReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
