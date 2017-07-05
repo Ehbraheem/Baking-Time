@@ -36,6 +36,9 @@
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".ui.widget.RecipesWidgetProvider"
+            android:resource="@xml/recipes_widget_provider_info"/>
     </application>
 
 </manifest>
