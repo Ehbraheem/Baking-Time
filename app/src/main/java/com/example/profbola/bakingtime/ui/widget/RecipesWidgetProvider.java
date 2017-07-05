@@ -1,4 +1,4 @@
-package com.example.profbola.bakingtime;
+package com.example.profbola.bakingtime.ui.widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -25,7 +25,7 @@ public class RecipesWidgetProvider extends AppWidgetProvider {
         Intent intent = new Intent(context, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-        views.setOnClickPendingIntent(R.id.recipe_widget_image, pendingIntent);
+        views.setOnClickPendingIntent(R.id.widget_recipe_image, pendingIntent);
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
