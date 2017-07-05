@@ -88,7 +88,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             mRecipe = recipe;
 
             mTitleView.setText(recipe.name);
-            mServingsView.setText(recipe.servings);
+            mServingsView.setText(String.valueOf(recipe.servings));
             int id = mContext.getResources().getIdentifier(recipe.image, "drawable", mContext.getPackageName());
             mRecipeImage.setImageResource(id);
         }
