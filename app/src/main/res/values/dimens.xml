@@ -9,4 +9,5 @@
     <dimen name="item_width">300dp</dimen>
     <dimen name="widget_min_height">40dp</dimen>
     <dimen name="widget_min_width">@dimen/widget_min_height</dimen>
+    <dimen name="widget_margin">8dp</dimen>
 </resources>
