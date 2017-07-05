@@ -42,9 +42,7 @@ public class RecipeService extends IntentService {
     }
 
     private void handleActionSynRecipes() {
-        JSONArray jsonArray = RecipeNetworkUtil.getRecipeFromApi();
-        List<Recipe> mRecipes = RecipeParser.parse(jsonArray);
-
+        RecipeTasks.writeRecipes(this);
     }
 
     public static void startActionSyncRecipes(Context context) {
