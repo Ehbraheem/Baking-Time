@@ -4,7 +4,9 @@
     android:initialLayout="@layout/recipes_widget_provider"
     android:minHeight="@dimen/widget_min_height"
     android:minWidth="@dimen/widget_min_width"
-    android:previewImage="@drawable/cheese_cake"
+    android:previewImage="@drawable/brownies"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="@integer/widget_update_period"
-    android:widgetCategory="home_screen"></appwidget-provider>
+    android:widgetCategory="home_screen" >
+
+</appwidget-provider>
