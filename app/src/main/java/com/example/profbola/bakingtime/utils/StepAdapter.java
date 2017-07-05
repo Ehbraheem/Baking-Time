@@ -64,6 +64,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepViewHolder
 
         void bind(int position) {
             mStep = mSteps[position];
+
             id.setText(String.valueOf(mStep.id));
             description.setText(mStep.description);
         }
