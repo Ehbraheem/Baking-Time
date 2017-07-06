@@ -13,4 +13,6 @@
     <string name="rewind">Rewind</string>
     <string name="ff">Fast Foward</string>
     <string name="notification_text">Press play to to see the Step!</string>
+
+    <string name="empty_recipes">Baker\'s cookbook is empty!</string>
 </resources>

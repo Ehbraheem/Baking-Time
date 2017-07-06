@@ -10,4 +10,5 @@
     <color name="navigationBarColor">#000000</color>
     <color name="colorAccent">#c8e8ff</color>
     <color name="widgetBackground">#09C</color>
+    <!--<color name="textColor">#ffffff</color>-->
 </resources>
