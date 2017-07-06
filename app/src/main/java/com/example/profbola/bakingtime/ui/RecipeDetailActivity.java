@@ -56,7 +56,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
         }
 
         if (savedInstanceState == null) {
-            Recipe recipe = (Recipe) getIntent().getExtras().get("NAME");
+            Recipe recipe = (Recipe) getIntent().getExtras().get(MainActivity.RECIPE);
             mIngredientsFragment = new IngredientsFragment();
             mIngredientsFragment.addData(recipe.ingredients);
 
