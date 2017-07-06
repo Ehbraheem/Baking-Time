@@ -1,14 +1,21 @@
 package com.example.profbola.bakingtime.ui.widget;
 
+import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
 import android.widget.RemoteViews;
 
 import com.example.profbola.bakingtime.R;
+import com.example.profbola.bakingtime.models.Recipe;
+import com.example.profbola.bakingtime.services.RecipeService;
 import com.example.profbola.bakingtime.ui.MainActivity;
+import com.example.profbola.bakingtime.ui.RecipeDetailActivity;
+import com.example.profbola.bakingtime.utils.RecipeUtils;
 
 /**
  * Created by prof.BOLA on 7/4/2017.
@@ -16,40 +23,96 @@ import com.example.profbola.bakingtime.ui.MainActivity;
 
 public class RecipesWidgetProvider extends AppWidgetProvider {
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+                                int appWidgetId, Recipe recipe) {
 
+        Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
+        int width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
+        RemoteViews rv;
+
+        if (width < 300) {
+            rv = getSingleRecipeRemoteViews(context, recipe);
+        } else {
+            rv = getBakersLogicGridRemoteViews(context);
+        }
+
+        appWidgetManager.updateAppWidget(appWidgetId, rv);
+    }
+
+    private static RemoteViews getBakersLogicGridRemoteViews(Context context) {
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipes_widget_grid_view);
+
+        Intent intent = new Intent(context, GridWidgetService.class);
+        views.setRemoteAdapter(R.id.widget_grid_view, intent);
+
+        Intent appIntent = new Intent(context, RecipeDetailActivity.class);
+        PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setPendingIntentTemplate(R.id.widget_grid_view, appPendingIntent);
+
+        views.setEmptyView(R.id.widget_grid_view, R.id.widget_empty_view);
+
+        return views;
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @Override
+    public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
+
+        RecipeService.startActionUpdateRecipeWidget(context);
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
+    }
+
+    private static RemoteViews getSingleRecipeRemoteViews(Context context, Recipe recipe) {
         RemoteViews views = new RemoteViews(context.getPackageName(),
                 R.layout.recipes_widget_provider);
 
-        Intent intent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        int id = RecipeUtils.getResourceIdFromName(context, recipe.image);
+        views.setImageViewResource(R.id.widget_recipe_image, id);
+        views.setTextViewText(R.id.widget_recipe_name, recipe.name);
+        views.setTextViewText(R.id.widget_recipe_servings, "served: " + String.valueOf(recipe.servings));
 
+        Intent intent = new Intent(context, RecipeDetailActivity.class);
+        intent.putExtra(MainActivity.RECIPE, recipe);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         views.setOnClickPendingIntent(R.id.widget_recipe_image, pendingIntent);
 
-        appWidgetManager.updateAppWidget(appWidgetId, views);
+        Intent syncIntent = new Intent(context, RecipeService.class);
+        syncIntent.setAction(RecipeService.ACTION_SYC_RECIPES);
+        PendingIntent syncPendingIntent = PendingIntent.getService(
+                context,
+                0,
+                syncIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+
+        views.setOnClickPendingIntent(R.id.widget_sync_recipes, syncPendingIntent);
+
+        return views;
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        RecipeService.startActionUpdateRecipeWidget(context);
+    }
 
-        for (int appWidgetId: appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
+    public static void updateRecipeWidgets(Context context, AppWidgetManager appWidgetManager,
+                                            int[] widgetIds, Recipe recipe) {
+
+        for (int widgetId: widgetIds) {
+            updateAppWidget(context, appWidgetManager, widgetId, recipe);
         }
     }
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
-        super.onDeleted(context, appWidgetIds);
     }
 
     @Override
     public void onEnabled(Context context) {
-        super.onEnabled(context);
     }
 
     @Override
     public void onDisabled(Context context) {
-        super.onDisabled(context);
     }
 }
