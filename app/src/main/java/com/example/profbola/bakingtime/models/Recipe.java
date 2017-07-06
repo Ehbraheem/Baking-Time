@@ -107,6 +107,9 @@ public class Recipe implements Parcelable {
         cv.put(RecipeContract.RecipeEntry.COLUMN_NAME, name);
         cv.put(RecipeContract.RecipeEntry.COLUMN_SERVINGS, servings);
 
+        long displayedTime = System.currentTimeMillis();
+        cv.put(RecipeContract.RecipeEntry.COLUMN_WIDGET_LAST_DISPLAYED, displayedTime);
+
         return cv;
     }
 }
