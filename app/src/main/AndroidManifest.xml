@@ -24,13 +24,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.RecipeDetailActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".ui.MainActivity"></activity>
-        <activity android:name=".ui.FullDetailActivity"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <activity
+            android:name=".ui.FullDetailActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".ui.RecipeDetailActivity"></activity>
+            android:parentActivityName=".ui.RecipeDetailActivity" />
+
         <receiver android:name=".ui.FullDetailsFragment$MediaReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
@@ -46,6 +50,14 @@
                 android:resource="@xml/recipes_widget_provider_info" />
         </receiver>
         <service android:name=".services.RecipeService" />
+        <provider
+            android:authorities="com.example.profbola.bakingtime.provider"
+            android:exported="true"
+            android:name=".provider.RecipeProvider" />
+
+        <service android:name=".ui.widget.GridWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
     </application>
 
 </manifest>
