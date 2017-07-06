@@ -33,6 +33,8 @@ public class RecipeTasks {
             insertSteps(context, recipe);
         }
 
+        RecipeService.startActionUpdateRecipeWidget(context);
+
     }
 
     private static void insertSteps(Context context, Recipe recipe) {
