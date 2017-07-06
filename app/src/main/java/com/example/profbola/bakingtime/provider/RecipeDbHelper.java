@@ -12,7 +12,7 @@ import com.example.profbola.bakingtime.provider.RecipeContract.RecipeEntry;
 
 public class RecipeDbHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "bakingapp.db";
+    private static final String DATABASE_NAME = "bakingtime.db";
 
     private static final int DATABASE_VERSION = 1;
 
@@ -29,7 +29,7 @@ public class RecipeDbHelper extends SQLiteOpenHelper {
                 RecipeEntry.COLUMN_IMAGE + " STRING, "                                           +
                 RecipeEntry.COLUMN_SERVINGS + " INTEGER NOT NULL, "                              +
                 RecipeEntry.COLUMN_ID + " INTEGER NOT NULL, "                                    +
-//                RecipeEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, "                                 +
+                RecipeEntry.COLUMN_WIDGET_LAST_DISPLAYED + " TIMESTAMP, "                        +
                 "UNIQUE ( "  +  RecipeEntry.COLUMN_NAME  +  ", " + RecipeEntry.COLUMN_ID         +
                 " ) ON CONFLICT REPLACE "                                                        +
                 "); ";
@@ -40,6 +40,7 @@ public class RecipeDbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + RecipeEntry.TABLE_NAME);
+
         onCreate(db);
     }
 }

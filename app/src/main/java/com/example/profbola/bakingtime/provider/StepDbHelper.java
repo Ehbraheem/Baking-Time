@@ -11,7 +11,7 @@ import com.example.profbola.bakingtime.provider.RecipeContract.StepEntry;
 
 public class StepDbHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "bakingapp.db";
+    private static final String DATABASE_NAME = "bakingtime.db";
 
     private static final int DATABASE_VERSION = 1;
 

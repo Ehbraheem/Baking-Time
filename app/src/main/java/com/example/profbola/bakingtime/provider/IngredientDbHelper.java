@@ -12,7 +12,7 @@ import com.example.profbola.bakingtime.provider.RecipeContract.IngredientEntry;
 
 public class IngredientDbHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "bakingapp.db";
+    private static final String DATABASE_NAME = "bakingtime.db";
 
     private static final int DATABASE_VERSION = 1;
 
@@ -26,10 +26,10 @@ public class IngredientDbHelper extends SQLiteOpenHelper {
                 IngredientEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "                                   +
                 IngredientEntry.COLUMN_INGREDIENT + " STRING NOT NULL, "                                       +
                 IngredientEntry.COLUMN_MEASURE + " STRING NOT NULL, "                                          +
-                IngredientEntry.COLUMN_QUANTITY + " REAL NOT NULL, "                                         +
+                IngredientEntry.COLUMN_QUANTITY + " REAL NOT NULL, "                                           +
                 IngredientEntry.COLUMN_RECIPE_ID + " INTEGER, "                                                +
                 " FOREIGN KEY ( " + IngredientEntry.COLUMN_RECIPE_ID + " ) REFRENCES "                         +
-                RecipeContract.RecipeEntry.TABLE_NAME + " ( " + RecipeContract.RecipeEntry.COLUMN_ID + ")"     +
+                RecipeContract.RecipeEntry.TABLE_NAME + " ( " + RecipeContract.RecipeEntry.COLUMN_ID + " ) "   +
 
                 " UNIQUE ( " + IngredientEntry.COLUMN_INGREDIENT + " ) ON CONFLICT REPLACE "                   +
                 ");";
