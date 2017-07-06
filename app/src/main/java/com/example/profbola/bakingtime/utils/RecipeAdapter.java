@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.profbola.bakingtime.R;
 import com.example.profbola.bakingtime.models.Recipe;
+import com.example.profbola.bakingtime.ui.MainActivity;
 import com.example.profbola.bakingtime.ui.RecipeDetailActivity;
 
 import java.util.List;
@@ -80,7 +81,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             Snackbar.make(v, "Congrats!!! You Just Clicked a cake!!!! Stay tuned for how to bake!!!", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             Intent transportIntent = new Intent(mContext, RecipeDetailActivity.class);
-            transportIntent.putExtra("NAME", mRecipe);
+            transportIntent.putExtra(MainActivity.RECIPE, mRecipe);
             mContext.startActivity(transportIntent);
         }
 
