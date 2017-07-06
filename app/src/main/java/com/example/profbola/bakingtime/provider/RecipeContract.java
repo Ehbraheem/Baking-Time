@@ -11,7 +11,7 @@ import android.provider.BaseColumns;
 
 public class RecipeContract {
 
-    public static final String AUTHORITY = "com.example.profbola.bakingapp.provider";
+    public static final String AUTHORITY = "com.example.profbola.bakingtime.provider";
 
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
 
@@ -35,6 +35,8 @@ public class RecipeContract {
         public static final String COLUMN_SERVINGS = "servings";
 
         public static final String COLUMN_IMAGE = "image";
+
+        public static final String COLUMN_WIDGET_LAST_DISPLAYED = "last_displayed";
 
 //        public static final String COLUMN_OVERVIEW = "overview";
 
