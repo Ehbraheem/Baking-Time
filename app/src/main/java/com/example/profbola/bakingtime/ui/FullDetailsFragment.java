@@ -16,6 +16,7 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 
@@ -50,6 +52,8 @@ public class FullDetailsFragment extends Fragment implements ExoPlayer.EventList
 
     private SimpleExoPlayerView mPlayerView;
     private SimpleExoPlayer mExoPlayer;
+
+    private ImageView mThumbnailView;
 
     private static MediaSessionCompat mMediaSession;
 
@@ -94,11 +98,10 @@ public class FullDetailsFragment extends Fragment implements ExoPlayer.EventList
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onPause() {
+        super.onPause();
         if (mExoPlayer != null) releasePlayer();
     }
-
 
     private void setUpIngredient(View view) {
         Toast.makeText(getContext(), "It Worked!!!", Toast.LENGTH_SHORT).show();
@@ -121,14 +124,17 @@ public class FullDetailsFragment extends Fragment implements ExoPlayer.EventList
 
         view.findViewById(R.id.player_view).setVisibility(View.VISIBLE);
         view.findViewById(R.id.ingredient_view).setVisibility(View.GONE);
+
         if (!mStep.videoURL.isEmpty()) {
             mPlayerView = (SimpleExoPlayerView) view.findViewById(R.id.playerView);
             setUpMediaSession();
             initializePlayer(Uri.parse(mStep.videoURL));
 //        mPlayerView.setDefaultArtwork();
-        } //else if (!step.thumbnailURL.isEmpty()) {
-
-        //}
+        }
+        if (!mStep.thumbnailURL.isEmpty()) {
+            mThumbnailView = (ImageView) view.findViewById(R.id.stepThumbnail);
+            Picasso.with(mContext).load(mStep.thumbnailURL).into(mThumbnailView);
+        }
     }
 
     private void initializePlayer(Uri mediaUri) {
@@ -283,13 +289,13 @@ public class FullDetailsFragment extends Fragment implements ExoPlayer.EventList
         @Override
         public void onRewind() {
             long currentPostion = mExoPlayer.getCurrentPosition();
-            mExoPlayer.seekTo(currentPostion - 10);
+            mExoPlayer.seekTo(currentPostion - 5);
         }
 
         @Override
         public void onFastForward() {
             long currentPostion = mExoPlayer.getCurrentPosition();
-            mExoPlayer.seekTo(currentPostion + 10);
+            mExoPlayer.seekTo(currentPostion + 5);
         }
     }
 
