@@ -35,7 +35,7 @@ public class RecipeTasks {
             insertRecipe(context, recipe);
         }
 
-//        RecipeService.startActionUpdateRecipeWidget(context);
+        RecipeService.startActionUpdateRecipeWidget(context);
 
     }
 
