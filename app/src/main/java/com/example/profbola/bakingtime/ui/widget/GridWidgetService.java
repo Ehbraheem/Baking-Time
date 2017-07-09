@@ -52,7 +52,7 @@ class GridRemoteViewFactory implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onDestroy() {
-        mCursor.close();
+        if (mCursor != null) mCursor.close();
     }
 
     @Override
@@ -74,7 +74,8 @@ class GridRemoteViewFactory implements RemoteViewsService.RemoteViewsFactory {
         views.setTextViewText(R.id.widget_recipe_name, recipe.name);
         views.setTextViewText(R.id.widget_recipe_servings, RecipeUtils.formatServings(recipe.servings));
         views.setImageViewResource(R.id.widget_recipe_image, imgRes);
-        views.setViewVisibility(R.id.widget_sync_recipes, View.GONE);
+        views.setViewVisibility(R.id.widget_ingredients_listing, View.GONE);
+//        views.setViewVisibility(R.id.widget_sync_recipes, View.GONE);
 
         Intent fillInIntent = new Intent();
         fillInIntent.putExtra(MainActivity.RECIPE, recipe);
@@ -91,16 +92,16 @@ class GridRemoteViewFactory implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public int getViewTypeCount() {
-        return 0;
+        return 1;
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return 1;
     }
 
     @Override
     public boolean hasStableIds() {
-        return false;
+        return true;
     }
 }
