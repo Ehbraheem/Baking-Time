@@ -14,6 +14,7 @@ import com.example.profbola.bakingtime.models.Ingredient;
 import com.example.profbola.bakingtime.models.Recipe;
 import com.example.profbola.bakingtime.models.Step;
 import com.example.profbola.bakingtime.provider.RecipeContract;
+import com.example.profbola.bakingtime.ui.RecipeDetailActivity;
 import com.example.profbola.bakingtime.ui.widget.RecipesWidgetProvider;
 
 import org.json.JSONArray;
@@ -103,7 +104,7 @@ public class RecipeService extends IntentService {
                 null,
                 null,
                 null,
-                RecipeContract.StepEntry.COLUMN_ID
+                RecipeContract.StepEntry.COLUMN_ID + " ASC"
         );
 
         Cursor ingCursor = getContentResolver().query(
@@ -115,8 +116,10 @@ public class RecipeService extends IntentService {
         );
 
         if (checkCursors(ingCursor, stepCursor)) {
-            recipe.steps = (Step[]) consumeStepCursor(stepCursor).toArray();
-            recipe.ingredients = (Ingredient[]) consumeIngredientCursor(ingCursor).toArray();
+            List<Step> steps = consumeStepCursor(stepCursor);
+            List<Ingredient> ingredients = consumeIngredientCursor(ingCursor);
+            recipe.steps = steps.toArray(new Step[steps.size()]);
+            recipe.ingredients = ingredients.toArray(new Ingredient[ingredients.size()]);
         }
     }
 
@@ -129,6 +132,7 @@ public class RecipeService extends IntentService {
         intent.setAction(ACTION_SYC_RECIPES);
         context.startService(intent);
     }
+
 
     public static void startActionUpdateRecipeWidget(Context context) {
         Intent intent = new Intent(context, RecipeService.class);
