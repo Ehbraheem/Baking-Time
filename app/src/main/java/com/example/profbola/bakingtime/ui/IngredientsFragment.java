@@ -84,5 +84,6 @@ public class IngredientsFragment extends Fragment {
 
     public void addData(Ingredient[] ingredients) {
         mIngredients = ingredients;
+        mAdapter.swapIngredients(mIngredients);
     }
 }
