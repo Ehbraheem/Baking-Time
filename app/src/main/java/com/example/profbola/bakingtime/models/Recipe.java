@@ -6,16 +6,20 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.profbola.bakingtime.provider.RecipeContract;
+import com.example.profbola.bakingtime.utils.RecipeUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by prof.BOLA on 6/29/2017.
  */
 
-public class Recipe implements Parcelable {
+public class Recipe implements Parcelable, RecipeUtils.IsPersistable<Recipe> {
 
     private static final String SERVINGS_KEY = "servings";
     private static final String NAME_KEY = "name";
@@ -24,12 +28,14 @@ public class Recipe implements Parcelable {
     public static final String STEPS_KEY = "steps";
     public static final String ID_KEY = "id";
 
-    public final String name;
-    public final int id;
-    public final String image;
-    public final int servings;
+    public String name;
+    public int id;
+    public String image;
+    public int servings;
     public Ingredient[] ingredients;
     public Step[] steps;
+
+    public Recipe() {}
 
     public Recipe(JSONObject object) throws JSONException {
         name = object.getString(NAME_KEY);
@@ -111,5 +117,21 @@ public class Recipe implements Parcelable {
         cv.put(RecipeContract.RecipeEntry.COLUMN_WIDGET_LAST_DISPLAYED, displayedTime);
 
         return cv;
+    }
+
+    @Override
+    public List<Recipe> consumeCusor(Cursor cursor) {
+        List<Recipe> recipes = new ArrayList<>();
+        for (int i = 0; i < cursor.getCount(); i++) {
+            cursor.moveToPosition(i);
+            recipes.add(new Recipe(cursor));
+        }
+        cursor.close();
+        return recipes;
+    }
+
+    public static List<Recipe> convertCursor(Cursor cursor) {
+        if (cursor == null || cursor.getCount() == 0) return null;
+        return new Recipe().consumeCusor(cursor);
     }
 }

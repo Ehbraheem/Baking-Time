@@ -6,23 +6,29 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.profbola.bakingtime.provider.RecipeContract;
+import com.example.profbola.bakingtime.utils.RecipeUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by prof.BOLA on 7/2/2017.
  */
 
-public class Ingredient implements Parcelable {
+public class Ingredient implements Parcelable, RecipeUtils.IsPersistable<Ingredient> {
 
     private static final String QUANTITY_KEY = "quantity";
     private static final String MEASURE_KEY = "measure";
     private static final String INGREDIENT_KEY = "ingredient";
 
-    public final int quantity;
-    public final String ingredient;
-    public final String measure;
+    public int quantity;
+    public String ingredient;
+    public String measure;
+
+    public Ingredient(){}
 
     public Ingredient(JSONObject object) throws JSONException {
         quantity = object.getInt(QUANTITY_KEY);
@@ -78,5 +84,21 @@ public class Ingredient implements Parcelable {
         cv.put(RecipeContract.IngredientEntry.COLUMN_RECIPE_ID, id);
 
         return cv;
+    }
+
+    @Override
+    public List<Ingredient> consumeCusor(Cursor cursor) {
+        List<Ingredient> ingredients = new ArrayList<>();
+        for (int i = 0; i < cursor.getCount(); i++) {
+            cursor.moveToPosition(i);
+            ingredients.add(new Ingredient(cursor));
+        }
+        cursor.close();
+        return ingredients;
+    }
+
+    public static List<Ingredient> convertCursor(Cursor cursor) {
+        if (cursor == null || cursor.getCount() == 0) return null;
+        return new Ingredient().consumeCusor(cursor);
     }
 }
