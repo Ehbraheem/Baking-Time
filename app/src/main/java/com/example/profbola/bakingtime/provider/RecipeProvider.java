@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.example.profbola.bakingtime.provider.RecipeContract.*;
 
@@ -26,11 +27,7 @@ public class RecipeProvider extends ContentProvider {
 
     private static final int CODE_SINGLE_RECIPE_STEPS = 101200;
 
-    private RecipeDbHelper recipeDbHelper;
-
-    private StepDbHelper stepDbHelper;
-
-    private IngredientDbHelper ingredientDbHelper;
+    private DbHelper dbHelper;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
@@ -59,9 +56,7 @@ public class RecipeProvider extends ContentProvider {
     public boolean onCreate() {
 
         Context context = getContext();
-        recipeDbHelper = new RecipeDbHelper(context);
-        ingredientDbHelper = new IngredientDbHelper(context);
-        stepDbHelper = new StepDbHelper(context);
+        dbHelper = new DbHelper(context);
         return true;
     }
 
@@ -76,7 +71,7 @@ public class RecipeProvider extends ContentProvider {
 
         switch (match) {
             case CODE_RECIPES:
-                db = recipeDbHelper.getReadableDatabase();
+                db = dbHelper.getReadableDatabase();
 
                 retCusor = db.query(RecipeEntry.TABLE_NAME,
                         projection,
@@ -88,7 +83,7 @@ public class RecipeProvider extends ContentProvider {
                 break;
             case CODE_SINGLE_RECIPE:
 
-                db = recipeDbHelper.getReadableDatabase();
+                db = dbHelper.getReadableDatabase();
                 recipeId = uri.getLastPathSegment();
                 String recipeSelection = makeSelection(RecipeEntry._ID);
                 String[] recipeSelectionArgs = makeSelectionArgs(recipeId);
@@ -104,7 +99,7 @@ public class RecipeProvider extends ContentProvider {
 
             case CODE_SINGLE_RECIPE_INGREDIENTS:
 
-                db = ingredientDbHelper.getReadableDatabase();
+                db = dbHelper.getReadableDatabase();
                 recipeId = uri.getPathSegments().get(1);
                 String ingredientSelection = makeSelection(IngredientEntry.COLUMN_RECIPE_ID);
                 String[] ingredientSelectionArgs = makeSelectionArgs(recipeId);
@@ -121,7 +116,7 @@ public class RecipeProvider extends ContentProvider {
 
             case CODE_SINGLE_RECIPE_STEPS:
 
-                db = stepDbHelper.getReadableDatabase();
+                db = dbHelper.getReadableDatabase();
                 recipeId = uri.getPathSegments().get(1);
                 String stepSelection = makeSelection(StepEntry.COLUMN_RECIPE_ID);
                 String[] stepArgs = makeSelectionArgs(recipeId);
@@ -165,7 +160,7 @@ public class RecipeProvider extends ContentProvider {
 
             case CODE_RECIPES:
 
-                db = recipeDbHelper.getWritableDatabase();
+                db = dbHelper.getWritableDatabase();
                 id = db.insert(RecipeEntry.TABLE_NAME,
                         null,
                         values);
@@ -176,7 +171,7 @@ public class RecipeProvider extends ContentProvider {
 
             case CODE_SINGLE_RECIPE_INGREDIENTS:
 
-                db = ingredientDbHelper.getWritableDatabase();
+                db = dbHelper.getWritableDatabase();
                 recipeId = uri.getPathSegments().get(1);
 
                 id = db.insert(IngredientEntry.TABLE_NAME,
@@ -189,7 +184,7 @@ public class RecipeProvider extends ContentProvider {
 
             case CODE_SINGLE_RECIPE_STEPS:
 
-                db = stepDbHelper.getWritableDatabase();
+                db = dbHelper.getWritableDatabase();
                 recipeId = uri.getPathSegments().get(1);
 
                 id = db.insert(StepEntry.TABLE_NAME,
@@ -219,7 +214,7 @@ public class RecipeProvider extends ContentProvider {
         switch (match) {
 
             case CODE_RECIPES:
-                db = recipeDbHelper.getWritableDatabase();
+                db = dbHelper.getWritableDatabase();
                 db.beginTransaction();
 
                 try {
@@ -234,7 +229,7 @@ public class RecipeProvider extends ContentProvider {
                 return insertedRecords;
 
             case CODE_SINGLE_RECIPE_INGREDIENTS:
-                db = ingredientDbHelper.getWritableDatabase();
+                db = dbHelper.getWritableDatabase();
                 recipeId = uri.getPathSegments().get(1);
                 db.beginTransaction();
 
@@ -251,7 +246,7 @@ public class RecipeProvider extends ContentProvider {
                 return insertedRecords;
 
             case CODE_SINGLE_RECIPE_STEPS:
-                db = stepDbHelper.getWritableDatabase();
+                db = dbHelper.getWritableDatabase();
                 recipeId = uri.getPathSegments().get(1);
                 db.beginTransaction();
 
@@ -283,7 +278,7 @@ public class RecipeProvider extends ContentProvider {
 
             case CODE_RECIPES:
 
-                db = recipeDbHelper.getWritableDatabase();
+                db = dbHelper.getWritableDatabase();
                 numDeleted = db.delete(RecipeEntry.TABLE_NAME,
                         selection,
                         selectionArgs
@@ -292,7 +287,7 @@ public class RecipeProvider extends ContentProvider {
 
             case CODE_SINGLE_RECIPE_INGREDIENTS:
 
-                db = ingredientDbHelper.getWritableDatabase();
+                db = dbHelper.getWritableDatabase();
                 numDeleted = db.delete(IngredientEntry.TABLE_NAME,
                         selection,
                         selectionArgs
@@ -301,7 +296,7 @@ public class RecipeProvider extends ContentProvider {
 
             case CODE_SINGLE_RECIPE_STEPS:
 
-                db = stepDbHelper.getWritableDatabase();
+                db = dbHelper.getWritableDatabase();
                 numDeleted = db.delete(StepEntry.TABLE_NAME,
                         selection,
                         selectionArgs
@@ -327,7 +322,7 @@ public class RecipeProvider extends ContentProvider {
     }
 
     private String makeSelection(@NonNull String... args) {
-        String selection = args.toString().replace("\\s", ",");
+        String selection = TextUtils.join(", ", args);
         int lenght = args.length;
         String ques = "";
         if (lenght == 1) {

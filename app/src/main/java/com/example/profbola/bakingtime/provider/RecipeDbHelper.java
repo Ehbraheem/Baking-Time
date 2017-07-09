@@ -1,8 +1,6 @@
 package com.example.profbola.bakingtime.provider;
 
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.profbola.bakingtime.provider.RecipeContract.RecipeEntry;
 
@@ -10,18 +8,17 @@ import com.example.profbola.bakingtime.provider.RecipeContract.RecipeEntry;
  * Created by prof.BOLA on 6/23/2017.
  */
 
-public class RecipeDbHelper extends SQLiteOpenHelper {
+public class RecipeDbHelper {
 
-    private static final String DATABASE_NAME = "bakingtime.db";
+//    private static final String DATABASE_NAME = "bakingtime.db";
 
-    private static final int DATABASE_VERSION = 1;
+//    private static final int DATABASE_VERSION = 1;
 
-    public RecipeDbHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
+//    public RecipeDbHelper(Context context) {
+//        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+//    }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
+    public static void onCreate(SQLiteDatabase db) {
 
         final String SQL_CREATE_RECIPES_TABLE = "CREATE TABLE " + RecipeEntry.TABLE_NAME + " ( " +
                 RecipeEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "                         +
@@ -37,8 +34,7 @@ public class RecipeDbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_RECIPES_TABLE);
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + RecipeEntry.TABLE_NAME);
 
         onCreate(db);
