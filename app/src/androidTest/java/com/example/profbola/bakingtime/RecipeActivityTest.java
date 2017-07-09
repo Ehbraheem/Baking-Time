@@ -1,5 +1,6 @@
 package com.example.profbola.bakingtime;
 
+import android.support.test.espresso.ViewAssertion;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -45,9 +46,9 @@ public class RecipeActivityTest {
         onData(anything()).inAdapterView(withId(R.id.recipe_list))
                 .atPosition(0)
                 .perform(click());
-        onData(anything()).inAdapterView(R.id.ingredients_listing)
+        onData(anything()).inAdapterView(withId(R.id.ingredients_listing))
                 .atPosition(0)
-                .check(not(doesNotExist()));
+                .check((ViewAssertion) not(doesNotExist()));
     }
 
 }
