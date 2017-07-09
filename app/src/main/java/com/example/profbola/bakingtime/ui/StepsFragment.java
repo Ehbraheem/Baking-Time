@@ -82,6 +82,7 @@ public class StepsFragment extends Fragment {
     }
 
     public void addData(Step[] steps) {
-       mSteps = steps;
+        mSteps = steps;
+        mAdapter.swapSteps(mSteps);
     }
 }
