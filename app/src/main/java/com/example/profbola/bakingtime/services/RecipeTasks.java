@@ -1,5 +1,6 @@
 package com.example.profbola.bakingtime.services;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
@@ -12,6 +13,7 @@ import com.example.profbola.bakingtime.utils.RecipeParser;
 
 import org.json.JSONArray;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.profbola.bakingtime.provider.RecipeContract.RecipeEntry.CONTENT_URI;
@@ -26,14 +28,14 @@ public class RecipeTasks {
 
         JSONArray jsonArray = RecipeNetworkUtil.getRecipeFromApi();
         List<Recipe> recipeParser = RecipeParser.parse(jsonArray);
+        ContentValues[] recipesValues;
+        ContentValues[] ingredientValues;
 
         for (Recipe recipe: recipeParser) {
             insertRecipe(context, recipe);
-            insertIngredients(context, recipe);
-            insertSteps(context, recipe);
         }
 
-        RecipeService.startActionUpdateRecipeWidget(context);
+//        RecipeService.startActionUpdateRecipeWidget(context);
 
     }
 
@@ -62,5 +64,7 @@ public class RecipeTasks {
                 CONTENT_URI,
                 recipe.toContentValues()
         );
+        insertIngredients(context, recipe);
+        insertSteps(context, recipe);
     }
 }
