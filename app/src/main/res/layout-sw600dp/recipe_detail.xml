@@ -19,7 +19,9 @@
 
     <FrameLayout
         android:id="@+id/recipe_full_view"
-        android:layout_width="@dimen/item_width"
-        android:layout_height="match_parent"/>
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:layout_marginLeft="8dp"/>
 
 </LinearLayout>
