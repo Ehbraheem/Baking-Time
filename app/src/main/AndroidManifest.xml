@@ -58,6 +58,9 @@
         <service android:name=".ui.widget.GridWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
+        <service android:name=".ui.widget.IngredientWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
     </application>
 
 </manifest>
