@@ -80,8 +80,10 @@ public class MainActivityFragment extends Fragment {
             int count = data.getCount();
             mRecipes = Recipe.convertCursor(data);
             mRecipeAdapter.swapRecipes(mRecipes);
+        } else if (data.getCount() == 0) {
+            showErrorMessage(getString(R.string.empty_database));
         } else {
-            showErrorMessage();
+            showErrorMessage(getString(R.string.error_message));
         }
     }
 
@@ -96,9 +98,10 @@ public class MainActivityFragment extends Fragment {
 //        return recipes;
 //    }
 
-    private void showErrorMessage() {
+    private void showErrorMessage(String error) {
         mRecipeListView.setVisibility(View.INVISIBLE);
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
+        mErrorMessageDisplay.setText(error);
     }
 
     private void showRecipeList() {
