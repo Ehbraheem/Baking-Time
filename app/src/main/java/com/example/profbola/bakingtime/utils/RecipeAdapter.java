@@ -81,7 +81,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             Snackbar.make(v, "Congrats!!! You Just Clicked a cake!!!! Stay tuned for how to bake!!!", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             Intent transportIntent = new Intent(mContext, RecipeDetailActivity.class);
-            transportIntent.putExtra(MainActivity.RECIPE, mRecipe);
+            transportIntent.putExtra(RecipeConstants.RECIPE, mRecipe);
             mContext.startActivity(transportIntent);
         }
 

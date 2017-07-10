@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.profbola.bakingtime.provider.RecipeContract.RecipeEntry.CONTENT_URI;
+import static com.example.profbola.bakingtime.utils.RecipeConstants.RecipeServiceConstants.*;
 
 /**
  * Created by prof.BOLA on 7/5/2017.
@@ -30,20 +31,7 @@ import static com.example.profbola.bakingtime.provider.RecipeContract.RecipeEntr
 
 public class RecipeService extends IntentService {
 
-
     private static final String NAME = RecipeService.class.getName();
-
-    private static final String BASE_ACTION
-            = "com.example.profbola.bakingtime.services.action.";
-
-    public static final String ACTION_SYC_RECIPES
-            = BASE_ACTION + "sync_recipes";
-
-    public static final String ACTION_GET_ASSOCIATED_DATA
-            = BASE_ACTION + "get_associated_data";
-
-    public static final String UPDATE_RECIPE_WIDGET
-            = BASE_ACTION + "update_recipe_widget";
 
     /**
      * Creates an IntentService.  Invoked by the superclass's constructor.

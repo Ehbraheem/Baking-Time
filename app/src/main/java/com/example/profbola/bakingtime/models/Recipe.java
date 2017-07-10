@@ -15,18 +15,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.profbola.bakingtime.utils.RecipeConstants.RecipesConstants.*;
+
 /**
  * Created by prof.BOLA on 6/29/2017.
  */
 
 public class Recipe implements Parcelable, RecipeUtils.IsPersistable<Recipe> {
 
-    private static final String SERVINGS_KEY = "servings";
-    private static final String NAME_KEY = "name";
-    private static final String IMAGE_KEY = "image";
-    public static final String INGREDIENTS_KEY = "ingredients";
-    public static final String STEPS_KEY = "steps";
-    public static final String ID_KEY = "id";
 
     public String name;
     public int id;

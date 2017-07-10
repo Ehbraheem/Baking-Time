@@ -15,6 +15,8 @@ import com.example.profbola.bakingtime.R;
 import com.example.profbola.bakingtime.models.Step;
 import com.example.profbola.bakingtime.utils.StepAdapter;
 
+import static com.example.profbola.bakingtime.utils.RecipeConstants.StepFragmentContants.STEPS_KEY;
+
 /**
  * Created by prof.BOLA on 7/1/2017.
  */
@@ -24,8 +26,6 @@ public class StepsFragment extends Fragment {
     private RecyclerView mStepsListing;
     private StepAdapter mAdapter;
     private Step[] mSteps;
-
-    private static final String STEPS_KEY = "steps_key";
 
     OnVideoPlayerSelected mCallback;
 

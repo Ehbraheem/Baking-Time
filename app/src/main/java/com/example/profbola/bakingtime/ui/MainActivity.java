@@ -15,15 +15,13 @@ import android.widget.TextView;
 
 import com.example.profbola.bakingtime.R;
 import com.example.profbola.bakingtime.services.RecipeService;
+import com.example.profbola.bakingtime.utils.RecipeConstants;
 import com.example.profbola.bakingtime.utils.RecipeNetworkUtil;
 
 import static com.example.profbola.bakingtime.provider.RecipeContract.RecipeEntry.CONTENT_URI;
 
 public class MainActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
-
-    public static final String RECIPE = "recipe";
-    private static final int LOADER_ID = 456;
 
 
     private ProgressBar mLoadingIndicator;
@@ -39,7 +37,7 @@ public class MainActivity extends AppCompatActivity
         if (savedInstanceState == null ) {
             startSync(findViewById(R.id.fab));
             mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
-            getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+            getSupportLoaderManager().initLoader(RecipeConstants.RECIPE_LOADER_ID, null, this);
         }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -71,7 +69,7 @@ public class MainActivity extends AppCompatActivity
         mLoadingIndicator.setVisibility(View.GONE);
         switch (loader.getId()) {
 
-            case LOADER_ID:
+            case RecipeConstants.RECIPE_LOADER_ID:
 
                 MainActivityFragment fragment = (MainActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
                 fragment.changeData(data);

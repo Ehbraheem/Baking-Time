@@ -13,19 +13,13 @@ import android.text.TextUtils;
 
 import com.example.profbola.bakingtime.provider.RecipeContract.*;
 
+import static com.example.profbola.bakingtime.utils.RecipeConstants.RecipeProviderConstants.*;
+
 /**
  * Created by prof.BOLA on 6/23/2017.
  */
 
 public class RecipeProvider extends ContentProvider {
-
-    private static final int CODE_RECIPES = 100;
-
-    private static final int CODE_SINGLE_RECIPE = 101;
-
-    private static final int CODE_SINGLE_RECIPE_INGREDIENTS = 101100;
-
-    private static final int CODE_SINGLE_RECIPE_STEPS = 101200;
 
     private DbHelper dbHelper;
 

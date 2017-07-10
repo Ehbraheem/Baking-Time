@@ -22,9 +22,12 @@ import com.example.profbola.bakingtime.models.Recipe;
 import com.example.profbola.bakingtime.models.Step;
 import com.example.profbola.bakingtime.provider.RecipeContract;
 import com.example.profbola.bakingtime.services.RecipeService;
+import com.example.profbola.bakingtime.utils.RecipeConstants;
 import com.example.profbola.bakingtime.utils.RecipePagerAdapter;
 
 import java.util.List;
+
+import static com.example.profbola.bakingtime.utils.RecipeConstants.RecipeDetailsConstants.*;
 
 /**
  * Created by prof.BOLA on 7/1/2017.
@@ -35,9 +38,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements
         StepsFragment.OnVideoPlayerSelected,
         LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final String INGREDIENT_TAB = "ingredients";
-    private static final String STEP_TAB = "steps";
-
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -47,12 +47,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     private FullDetailsFragment mFullDetailsFragment;
 
     private boolean mTwoPane;
-
-    public static final String INGREDIENTS_KEY = "ingredient";
-    public static final String STEP_KEY = "step";
-
-    public static final int STEP_LOADER_ID = 223;
-    public static final int INGREDIENT_LOADER_ID = 445;
 
     private Recipe mRecipe;
     private List<Ingredient> mIngredients;
@@ -76,7 +70,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
         }
 
         if (savedInstanceState == null) {
-            Recipe recipe = (Recipe) getIntent().getExtras().get(MainActivity.RECIPE);
+            Recipe recipe = (Recipe) getIntent().getExtras().get(RecipeConstants.RECIPE);
             // FIXME: 7/8/2017 Register Loaders
             mRecipe = recipe;
 

@@ -14,6 +14,8 @@ import com.example.profbola.bakingtime.R;
 import com.example.profbola.bakingtime.models.Ingredient;
 import com.example.profbola.bakingtime.utils.IngredientAdapter;
 
+import static com.example.profbola.bakingtime.utils.RecipeConstants.IngredientFragmentConstants.INGREDIENT_KEY;
+
 /**
  * Created by prof.BOLA on 7/1/2017.
  */
@@ -23,8 +25,6 @@ public class IngredientsFragment extends Fragment {
     private RecyclerView mIngredientListing;
     private IngredientAdapter mAdapter;
     private Ingredient[] mIngredients;
-
-    private static final String INGREDIENT_KEY = "ingredients_key";
 
     OnIngredientSelected mCallback;
 

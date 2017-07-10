@@ -16,6 +16,8 @@ import com.example.profbola.bakingtime.R;
 import com.example.profbola.bakingtime.models.Ingredient;
 import com.example.profbola.bakingtime.provider.RecipeContract;
 
+import static com.example.profbola.bakingtime.utils.RecipeConstants.RecipesWidgetProviderConstants.RECIPE_ID;
+
 
 /**
  * Created by prof.BOLA on 7/9/2017.
@@ -25,7 +27,7 @@ public class IngredientWidgetService extends RemoteViewsService{
 
     @Override public RemoteViewsFactory onGetViewFactory(Intent intent) {
 
-        int recipeId = intent.getIntExtra(RecipesWidgetProvider.RECIPE_ID, 1);
+        int recipeId = intent.getIntExtra(RECIPE_ID, 1);
         return new IngredientAdapterFactory(this.getApplicationContext(), recipeId);
 
     }

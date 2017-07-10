@@ -13,6 +13,8 @@ import com.example.profbola.bakingtime.provider.RecipeContract;
 import com.example.profbola.bakingtime.ui.MainActivity;
 import com.example.profbola.bakingtime.utils.RecipeUtils;
 
+import static com.example.profbola.bakingtime.utils.RecipeConstants.RECIPE;
+
 /**
  * Created by prof.BOLA on 7/6/2017.
  */
@@ -78,7 +80,7 @@ class GridRemoteViewFactory implements RemoteViewsService.RemoteViewsFactory {
 //        views.setViewVisibility(R.id.widget_sync_recipes, View.GONE);
 
         Intent fillInIntent = new Intent();
-        fillInIntent.putExtra(MainActivity.RECIPE, recipe);
+        fillInIntent.putExtra(RECIPE, recipe);
 
         views.setOnClickFillInIntent(R.id.widget_recipe_image, fillInIntent);
 

@@ -17,13 +17,15 @@ import com.example.profbola.bakingtime.ui.MainActivity;
 import com.example.profbola.bakingtime.ui.RecipeDetailActivity;
 import com.example.profbola.bakingtime.utils.RecipeUtils;
 
+import static com.example.profbola.bakingtime.utils.RecipeConstants.RECIPE;
+import static com.example.profbola.bakingtime.utils.RecipeConstants.RecipeServiceConstants.ACTION_SYC_RECIPES;
+import static com.example.profbola.bakingtime.utils.RecipeConstants.RecipesWidgetProviderConstants.RECIPE_ID;
+
 /**
  * Created by prof.BOLA on 7/4/2017.
  */
 
 public class RecipesWidgetProvider extends AppWidgetProvider {
-
-    public static final String RECIPE_ID = "recipeId";
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
@@ -75,7 +77,7 @@ public class RecipesWidgetProvider extends AppWidgetProvider {
         views.setTextViewText(R.id.widget_recipe_servings, "served: " + String.valueOf(recipe.servings));
 
         Intent intent = new Intent(context, RecipeDetailActivity.class);
-        intent.putExtra(MainActivity.RECIPE, recipe);
+        intent.putExtra(RECIPE, recipe);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         views.setOnClickPendingIntent(R.id.widget_recipe_image, pendingIntent);
 
@@ -84,7 +86,7 @@ public class RecipesWidgetProvider extends AppWidgetProvider {
         views.setRemoteAdapter(R.id.widget_ingredients_listing, ingredientIntent);
 
         Intent syncIntent = new Intent(context, RecipeService.class);
-        syncIntent.setAction(RecipeService.ACTION_SYC_RECIPES);
+        syncIntent.setAction(ACTION_SYC_RECIPES);
         PendingIntent syncPendingIntent = PendingIntent.getService(
                 context,
                 0,

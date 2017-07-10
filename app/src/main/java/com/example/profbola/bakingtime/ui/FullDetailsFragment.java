@@ -43,6 +43,8 @@ import com.google.android.exoplayer2.util.Util;
 import com.squareup.picasso.Picasso;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
+import static com.example.profbola.bakingtime.utils.RecipeConstants.RecipeDetailsConstants.INGREDIENTS_KEY;
+import static com.example.profbola.bakingtime.utils.RecipeConstants.RecipeDetailsConstants.STEP_KEY;
 
 /**
  * Created by prof.BOLA on 7/2/2017.
@@ -84,11 +86,11 @@ public class FullDetailsFragment extends Fragment implements ExoPlayer.EventList
         Bundle bundle = getArguments();
         mContext = getContext();
 
-        if (bundle != null && bundle.containsKey(RecipeDetailActivity.INGREDIENTS_KEY)) {
-            mIngredient = bundle.getParcelable(RecipeDetailActivity.INGREDIENTS_KEY);
+        if (bundle != null && bundle.containsKey(INGREDIENTS_KEY)) {
+            mIngredient = bundle.getParcelable(INGREDIENTS_KEY);
             setUpIngredient(view);
-        } else if (bundle != null && bundle.containsKey(RecipeDetailActivity.STEP_KEY)) {
-            mStep = bundle.getParcelable(RecipeDetailActivity.STEP_KEY);
+        } else if (bundle != null && bundle.containsKey(STEP_KEY)) {
+            mStep = bundle.getParcelable(STEP_KEY);
             setUpStep(view);
         }
 

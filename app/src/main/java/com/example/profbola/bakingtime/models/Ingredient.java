@@ -14,15 +14,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.profbola.bakingtime.utils.RecipeConstants.IngredientsConstants.*;
+
 /**
  * Created by prof.BOLA on 7/2/2017.
  */
 
 public class Ingredient implements Parcelable, RecipeUtils.IsPersistable<Ingredient> {
-
-    private static final String QUANTITY_KEY = "quantity";
-    private static final String MEASURE_KEY = "measure";
-    private static final String INGREDIENT_KEY = "ingredient";
 
     public int quantity;
     public String ingredient;

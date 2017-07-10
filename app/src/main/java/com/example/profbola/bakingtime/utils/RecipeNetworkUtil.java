@@ -18,13 +18,13 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import static com.example.profbola.bakingtime.utils.RecipeConstants.RecipeNetworkUtilConstants.API_URL;
+
 /**
  * Created by prof.BOLA on 6/29/2017.
  */
 
 public class RecipeNetworkUtil {
-
-    public static final String API_URL = "https://go.udacity.com/android-baking-app-json";
 
     private static URL makeApiUrlFromSring() {
         URL url = null;

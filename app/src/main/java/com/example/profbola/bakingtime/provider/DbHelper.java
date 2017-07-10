@@ -4,15 +4,13 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import static com.example.profbola.bakingtime.utils.RecipeConstants.DbHelperConstants.*;
+
 /**
  * Created by prof.BOLA on 7/7/2017.
  */
 
 public class DbHelper extends SQLiteOpenHelper {
-
-    private static final String DATABASE_NAME = "bakingtime.db";
-
-    private static final int DATABASE_VERSION = 1;
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
