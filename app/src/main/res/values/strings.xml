@@ -8,6 +8,13 @@
         An error has occurred. Please try again by clicking REFRESH
     </string>
 
+    <string name="no_connection">
+        Can\'t sync new recipes, because you\'re not connected to any network\n
+        Connect to a network and try again!!!
+    </string>
+
+    <string name="empty_database">No recipes currently available!!!</string>
+
     <string name="play">Play</string>
     <string name="pause">Pause</string>
     <string name="rewind">Rewind</string>
