@@ -74,7 +74,7 @@ public class RecipeService extends IntentService {
                 null,
                 null,
                 null,
-                RecipeContract.RecipeEntry.COLUMN_WIDGET_LAST_DISPLAYED
+                RecipeContract.RecipeEntry.COLUMN_WIDGET_LAST_DISPLAYED //+ " DESC"
         );
 
         if (cursor != null && cursor.getCount() > 0) {
