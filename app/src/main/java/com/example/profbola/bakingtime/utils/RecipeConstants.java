@@ -8,6 +8,12 @@ import com.example.profbola.bakingtime.services.RecipeService;
 
 public final class RecipeConstants {
 
+    /**
+     * This is used to mirror an outer static class
+     */
+    private RecipeConstants() {
+    }
+
     public static final String RECIPE = "recipe";
 
     public static final int RECIPE_LOADER_ID = 456;
