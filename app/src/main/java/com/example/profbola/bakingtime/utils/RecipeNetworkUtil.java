@@ -1,5 +1,10 @@
 package com.example.profbola.bakingtime.utils;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -58,5 +63,12 @@ public class RecipeNetworkUtil {
             connection.disconnect();
         }
         return recipes;
+    }
+
+    public static boolean networkCheck (@NonNull Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        return networkInfo != null;
     }
 }
