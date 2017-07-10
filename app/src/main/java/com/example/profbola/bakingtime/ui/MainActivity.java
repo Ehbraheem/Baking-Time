@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.profbola.bakingtime.R;
 import com.example.profbola.bakingtime.services.RecipeService;
+import com.example.profbola.bakingtime.utils.RecipeNetworkUtil;
 
 import static com.example.profbola.bakingtime.provider.RecipeContract.RecipeEntry.CONTENT_URI;
 
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         if (savedInstanceState == null ) {
-            startSync();
+            startSync(findViewById(R.id.fab));
             mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
             getSupportLoaderManager().initLoader(LOADER_ID, null, this);
         }
@@ -45,15 +46,19 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startSync(view);
             }
         });
 
     }
 
-    private void startSync() {
-        RecipeService.startActionSyncRecipes(this);
+    private void startSync(View view) {
+        boolean isConnected = RecipeNetworkUtil.networkCheck(this);
+        if (isConnected) {
+            RecipeService.startActionSyncRecipes(this);
+        } else {
+            Snackbar.make(view, getString(R.string.no_connection), Snackbar.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -67,11 +72,12 @@ public class MainActivity extends AppCompatActivity
         switch (loader.getId()) {
 
             case LOADER_ID:
-                if (data != null) {
-                    MainActivityFragment fragment = (MainActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
-                    fragment.changeData(data);
-                }
+
+                MainActivityFragment fragment = (MainActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
+                fragment.changeData(data);
+
                 break;
+
             default:
                 return;
         }
