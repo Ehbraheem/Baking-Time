@@ -23,6 +23,8 @@ import com.example.profbola.bakingtime.utils.RecipeUtils;
 
 public class RecipesWidgetProvider extends AppWidgetProvider {
 
+    public static final String RECIPE_ID = "recipeId";
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId, Recipe recipe) {
@@ -77,6 +79,10 @@ public class RecipesWidgetProvider extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         views.setOnClickPendingIntent(R.id.widget_recipe_image, pendingIntent);
 
+        Intent ingredientIntent = new Intent(context, IngredientWidgetService.class);
+        intent.putExtra(RECIPE_ID, recipe.id);
+        views.setRemoteAdapter(R.id.widget_ingredients_listing, ingredientIntent);
+
         Intent syncIntent = new Intent(context, RecipeService.class);
         syncIntent.setAction(RecipeService.ACTION_SYC_RECIPES);
         PendingIntent syncPendingIntent = PendingIntent.getService(
@@ -86,7 +92,8 @@ public class RecipesWidgetProvider extends AppWidgetProvider {
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
 
-        views.setOnClickPendingIntent(R.id.widget_sync_recipes, syncPendingIntent);
+
+//        views.setOnClickPendingIntent(R.id.widget_sync_recipes, syncPendingIntent);
 
         return views;
     }
