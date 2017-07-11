@@ -22,6 +22,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
@@ -35,7 +36,8 @@ import static org.hamcrest.Matchers.not;
 @RunWith(AndroidJUnit4.class)
 public class RecipeActivityTest {
 
-    public final String CAKE_NAME = "Nutella Pie";
+    private final String CAKE_NAME = "Nutella Pie";
+    private final String INGREDIENT_NAME = "heavy cream(cold)";
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule
@@ -60,18 +62,22 @@ public class RecipeActivityTest {
     @Test
     public void CakeName_AppearInListing() {
         onView(withId(R.id.recipe_list))
-                .perform(RecyclerViewActions
-                        .scrollToHolder(recipeViewHolderBoundedMatcher(CAKE_NAME)));
+                .check(matches(hasDescendant(withText(CAKE_NAME))));
+//                .perform(RecyclerViewActions
+//                        .scrollToHolder(recipeViewHolderBoundedMatcher(CAKE_NAME)));
     }
 
     @Test
     public void clickRecipeItem_OpensDetailActivity() {
         onView(withId(R.id.recipe_list))
-                .perform(RecyclerViewActions.actionOnItem(withId(R.id.recipe_list), click()));
+                .perform(click())
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         onView(withId(R.id.ingredients_listing))
-                .perform(RecyclerViewActions.scrollTo(withId(R.id.ingredient_name)))
-                .check((ViewAssertion) not(doesNotExist()));
+                .check(matches(hasDescendant(withText(INGREDIENT_NAME))));
+//        onView(withId(R.id.ingredients_listing))
+//                .perform(RecyclerViewActions.scrollTo(withId(R.id.ingredient_name)))
+//                .check((ViewAssertion) not(doesNotExist()));
     }
 
 }
