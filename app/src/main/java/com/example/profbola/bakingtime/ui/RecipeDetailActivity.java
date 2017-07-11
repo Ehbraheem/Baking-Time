@@ -156,17 +156,20 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
+        List<Step> steps = null;
+        List<Ingredient> ingredients = null;
+
         switch (loader.getId()) {
             case INGREDIENT_LOADER_ID:
                 mIngredientsFragment = new IngredientsFragment();
-                mIngredients = Ingredient.convertCursor(data);
-                
+                ingredients = Ingredient.convertCursor(data);
+
                 break;
             
             case STEP_LOADER_ID:
                 mStepsFragment = new StepsFragment();
-                mSteps = Step.convertCursor(data);
-                
+                steps = Step.convertCursor(data);
+
                 break;
             
             default:
@@ -174,8 +177,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements
         }
 
         // FIXME: 7/8/2017 SetUp Fragments
-        if (mSteps != null && mIngredients != null) {
-            deliverDataToFragments(mSteps, mIngredients);
+        if (steps != null || ingredients != null) {
+            deliverDataToFragments(steps, ingredients);
         }
     }
 
@@ -194,16 +197,23 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     }
 
     private void setUpLoaders() {
-        getSupportLoaderManager().restartLoader(STEP_LOADER_ID, null, this);
-        getSupportLoaderManager().restartLoader(INGREDIENT_LOADER_ID, null, this);
+        getSupportLoaderManager().initLoader(STEP_LOADER_ID, null, this);
+        getSupportLoaderManager().initLoader(INGREDIENT_LOADER_ID, null, this);
     }
 
     private void deliverDataToFragments(List<Step> steps, List<Ingredient> ingredients) {
 
-        mIngredientsFragment = (IngredientsFragment) viewPager.getAdapter().instantiateItem(viewPager, 0);
-        mIngredientsFragment.addData(ingredients.toArray(new Ingredient[ingredients.size()]));
-        mStepsFragment = (StepsFragment) viewPager.getAdapter().instantiateItem(viewPager, 1);
-        mStepsFragment.addData(steps.toArray(new Step[steps.size()]));
+        if (ingredients != null) {
+            mIngredientsFragment = (IngredientsFragment) viewPager.getAdapter().instantiateItem(viewPager, 0);
+            mIngredientsFragment.addData(ingredients.toArray(new Ingredient[ingredients.size()]));
+            mIngredients = ingredients;
+        }
+
+        if (steps != null) {
+            mStepsFragment = (StepsFragment) viewPager.getAdapter().instantiateItem(viewPager, 1);
+            mStepsFragment.addData(steps.toArray(new Step[steps.size()]));
+            mSteps = steps;
+        }
 
         viewPager.getAdapter().notifyDataSetChanged();
     }
