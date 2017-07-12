@@ -141,7 +141,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
                 Uri STEP_URI = RecipeContract.StepEntry.CONTENT_URI(recipeId);
                 String sortOrder = RecipeContract.StepEntry.COLUMN_ID + " ASC";
 
-                return createQueryCursor(STEP_URI, sortOrder);
+                return createQueryCursor(STEP_URI, null);
 
             case INGREDIENT_LOADER_ID:
                 Uri INGREDIENT_URI = RecipeContract.IngredientEntry.CONTENT_URI(recipeId);
@@ -156,19 +156,18 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-        List<Step> steps = null;
-        List<Ingredient> ingredients = null;
-
         switch (loader.getId()) {
             case INGREDIENT_LOADER_ID:
-                mIngredientsFragment = new IngredientsFragment();
-                ingredients = Ingredient.convertCursor(data);
+//                mIngredientsFragment = new IngredientsFragment();
+                List<Ingredient> ingredients = Ingredient.convertCursor(data);
+                deliverDataToIngredientFragment(ingredients);
 
                 break;
             
             case STEP_LOADER_ID:
-                mStepsFragment = new StepsFragment();
-                steps = Step.convertCursor(data);
+//                mStepsFragment = new StepsFragment();
+                List<Step> steps = Step.convertCursor(data);
+                deliverDataToStepFragment(steps);
 
                 break;
             
@@ -177,9 +176,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements
         }
 
         // FIXME: 7/8/2017 SetUp Fragments
-        if (steps != null || ingredients != null) {
-            deliverDataToFragments(steps, ingredients);
-        }
     }
 
     @Override
@@ -201,13 +197,16 @@ public class RecipeDetailActivity extends AppCompatActivity implements
         getSupportLoaderManager().initLoader(INGREDIENT_LOADER_ID, null, this);
     }
 
-    private void deliverDataToFragments(List<Step> steps, List<Ingredient> ingredients) {
+    private void deliverDataToIngredientFragment(List<Ingredient> ingredients) {
 
         if (ingredients != null) {
             mIngredientsFragment = (IngredientsFragment) viewPager.getAdapter().instantiateItem(viewPager, 0);
             mIngredientsFragment.addData(ingredients.toArray(new Ingredient[ingredients.size()]));
             mIngredients = ingredients;
         }
+    }
+
+    private void deliverDataToStepFragment(List<Step> steps) {
 
         if (steps != null) {
             mStepsFragment = (StepsFragment) viewPager.getAdapter().instantiateItem(viewPager, 1);
@@ -215,6 +214,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements
             mSteps = steps;
         }
 
-        viewPager.getAdapter().notifyDataSetChanged();
+//        viewPager.getAdapter().notifyDataSetChanged();
     }
 }
