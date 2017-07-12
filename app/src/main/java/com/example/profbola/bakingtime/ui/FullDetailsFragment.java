@@ -291,13 +291,13 @@ public class FullDetailsFragment extends Fragment implements ExoPlayer.EventList
         @Override
         public void onRewind() {
             long currentPostion = mExoPlayer.getCurrentPosition();
-            mExoPlayer.seekTo(currentPostion - 5);
+            mExoPlayer.seekTo(currentPostion - 5000);
         }
 
         @Override
         public void onFastForward() {
             long currentPostion = mExoPlayer.getCurrentPosition();
-            mExoPlayer.seekTo(currentPostion + 5);
+            mExoPlayer.seekTo(currentPostion + 5000);
         }
     }
 
