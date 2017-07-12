@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.example.profbola.bakingtime.R;
@@ -72,9 +73,13 @@ public class RecipesWidgetProvider extends AppWidgetProvider {
                 R.layout.recipes_widget_provider);
 
         int id = RecipeUtils.getResourceIdFromName(context, recipe.image);
-        views.setImageViewResource(R.id.widget_recipe_image, id);
-        views.setTextViewText(R.id.widget_recipe_name, recipe.name);
-        views.setTextViewText(R.id.widget_recipe_servings, "served: " + String.valueOf(recipe.servings));
+        // TODO: 7/12/2017 Undo after review
+//        views.setImageViewResource(R.id.widget_recipe_image, id);
+//        views.setTextViewText(R.id.widget_recipe_name, recipe.name);
+//        views.setTextViewText(R.id.widget_recipe_servings, "served: " + String.valueOf(recipe.servings));
+        views.setViewVisibility(R.id.widget_recipe_image, View.GONE);
+        views.setViewVisibility(R.id.widget_recipe_name, View.GONE);
+        views.setViewVisibility(R.id.widget_recipe_servings, View.GONE);
 
         Intent intent = new Intent(context, RecipeDetailActivity.class);
         intent.putExtra(RECIPE, recipe);
