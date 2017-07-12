@@ -33,6 +33,8 @@ public class RecipeTasks {
 
         for (Recipe recipe: recipeParser) {
             insertRecipe(context, recipe);
+            insertSteps(context, recipe);
+            insertIngredients(context, recipe);
         }
 
         RecipeService.startActionUpdateRecipeWidget(context);
@@ -64,7 +66,5 @@ public class RecipeTasks {
                 CONTENT_URI,
                 recipe.toContentValues()
         );
-        insertIngredients(context, recipe);
-        insertSteps(context, recipe);
     }
 }
