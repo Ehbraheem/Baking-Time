@@ -4,6 +4,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.profbola.bakingtime.provider.RecipeContract.IngredientEntry;
 
+import static com.example.profbola.bakingtime.utils.RecipeConstants.IngredientDbHelperConstants.INGREDIENT_RECIPE_ID_IDX;
+
 /**
  * Created by prof.BOLA on 6/23/2017.
  */
@@ -31,7 +33,11 @@ public class IngredientDbHelper {
                 " UNIQUE ( " + IngredientEntry.COLUMN_INGREDIENT + " ) ON CONFLICT REPLACE "                   +
                 ");";
 
+        final String SQL_CREATE_INDEX
+                = "CREATE INDEX " + INGREDIENT_RECIPE_ID_IDX + " ON " + IngredientEntry.TABLE_NAME + " ( " + IngredientEntry.COLUMN_RECIPE_ID + " );";
+
         db.execSQL(SQL_CREATE_INGREDIENTS_TABLE);
+        db.execSQL(SQL_CREATE_INDEX);
     }
 
     public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

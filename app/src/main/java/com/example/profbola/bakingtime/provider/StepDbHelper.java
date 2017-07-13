@@ -3,6 +3,9 @@ package com.example.profbola.bakingtime.provider;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.profbola.bakingtime.provider.RecipeContract.StepEntry;
+
+import static com.example.profbola.bakingtime.utils.RecipeConstants.StepDbHelperConstants.STEP_RECIPE_ID_IDX;
+
 /**
  * Created by prof.BOLA on 6/23/2017.
  */
@@ -28,10 +31,14 @@ public class StepDbHelper {
                 StepEntry.COLUMN_ID + " INTEGER NOT NULL, "                                                     +
                 " FOREIGN KEY ( " + StepEntry.COLUMN_RECIPE_ID + " ) REFERENCES "                               +
                 RecipeContract.RecipeEntry.TABLE_NAME + " ( " + RecipeContract.RecipeEntry.COLUMN_ID + " ) "    +
-                " UNIQUE ( " + StepEntry.COLUMN_VIDEO_URL + " ) ON CONFLICT REPLACE "                                  +
+                " UNIQUE ( " + StepEntry.COLUMN_VIDEO_URL + " ) ON CONFLICT REPLACE "                           +
                 ");";
 
+        final String SQL_CREATE_INDEX
+                = "CREATE INDEX " + STEP_RECIPE_ID_IDX + " ON " + StepEntry.TABLE_NAME + " ( " + StepEntry.COLUMN_RECIPE_ID + " );";
+
         db.execSQL(SQL_CREATE_STEPS_TABLE);
+        db.execSQL(SQL_CREATE_INDEX);
     }
 
     public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
