@@ -141,7 +141,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
                 Uri STEP_URI = RecipeContract.StepEntry.CONTENT_URI(recipeId);
                 String sortOrder = RecipeContract.StepEntry.COLUMN_ID + " ASC";
 
-                return createQueryCursor(STEP_URI, null);
+                return createQueryCursor(STEP_URI, sortOrder);
 
             case INGREDIENT_LOADER_ID:
                 Uri INGREDIENT_URI = RecipeContract.IngredientEntry.CONTENT_URI(recipeId);
