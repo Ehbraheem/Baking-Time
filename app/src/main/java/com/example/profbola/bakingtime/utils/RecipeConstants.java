@@ -121,4 +121,16 @@ public final class RecipeConstants {
 
     }
 
+    public static final class StepDbHelperConstants {
+
+        public static final String STEP_RECIPE_ID_IDX = "step_recipe_id_idx";
+
+    }
+
+    public static final class IngredientDbHelperConstants {
+
+        public static final String INGREDIENT_RECIPE_ID_IDX = "ingredient_recipe_id_idx";
+
+    }
+
 }
