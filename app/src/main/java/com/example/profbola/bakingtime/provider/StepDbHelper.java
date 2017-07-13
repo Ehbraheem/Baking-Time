@@ -28,7 +28,7 @@ public class StepDbHelper {
                 StepEntry.COLUMN_ID + " INTEGER NOT NULL, "                                                     +
                 " FOREIGN KEY ( " + StepEntry.COLUMN_RECIPE_ID + " ) REFERENCES "                               +
                 RecipeContract.RecipeEntry.TABLE_NAME + " ( " + RecipeContract.RecipeEntry.COLUMN_ID + " ) "    +
-                " UNIQUE ( " + StepEntry.COLUMN_ID + " ) ON CONFLICT REPLACE "                                  +
+                " UNIQUE ( " + StepEntry.COLUMN_VIDEO_URL + " ) ON CONFLICT REPLACE "                                  +
                 ");";
 
         db.execSQL(SQL_CREATE_STEPS_TABLE);
