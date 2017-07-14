@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/step_id"
+        android:padding="@dimen/padding4"
+        android:id="@+id/step_short_description"
         android:layout_width="wrap_content"
+        tools:text="@string/error_message"
+        android:layout_marginLeft="@dimen/padding4"
+        android:layout_marginRight="@dimen/padding4"
+        android:layout_marginTop="@dimen/padding4"
         android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/step_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+
 </LinearLayout>

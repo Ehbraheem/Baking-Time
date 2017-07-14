@@ -5,7 +5,7 @@
     <string name="recipe_title">Nutella Pie</string>
     <string name="recipe_servings">Servings: 8</string>
     <string name="error_message">
-        An error has occurred. Please try again by clicking REFRESH
+        An error has occurred. Please try again by clicking Sync icon
     </string>
 
     <string name="no_connection">

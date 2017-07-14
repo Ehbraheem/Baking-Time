@@ -5,6 +5,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -54,8 +56,6 @@ public class FullDetailsFragment extends Fragment implements ExoPlayer.EventList
 
     private SimpleExoPlayerView mPlayerView;
     private SimpleExoPlayer mExoPlayer;
-
-    private ImageView mThumbnailView;
 
     private static MediaSessionCompat mMediaSession;
 
@@ -127,6 +127,9 @@ public class FullDetailsFragment extends Fragment implements ExoPlayer.EventList
         view.findViewById(R.id.player_view).setVisibility(View.VISIBLE);
         view.findViewById(R.id.ingredient_view).setVisibility(View.GONE);
 
+        TextView descriptionView = (TextView) view.findViewById(R.id.step_description);
+        if (descriptionView != null) descriptionView.setText(mStep.description);
+
         if (!mStep.videoURL.isEmpty()) {
             mPlayerView = (SimpleExoPlayerView) view.findViewById(R.id.playerView);
             setUpMediaSession();
@@ -134,8 +137,8 @@ public class FullDetailsFragment extends Fragment implements ExoPlayer.EventList
 //        mPlayerView.setDefaultArtwork();
         }
         if (!mStep.thumbnailURL.isEmpty()) {
-            mThumbnailView = (ImageView) view.findViewById(R.id.stepThumbnail);
-            Picasso.with(mContext).load(mStep.thumbnailURL).into(mThumbnailView);
+            ImageView mThumbnailView = (ImageView) view.findViewById(R.id.stepThumbnail);
+            if (mThumbnailView != null) Picasso.with(mContext).load(mStep.thumbnailURL).into(mThumbnailView);
         }
     }
 
@@ -263,7 +266,8 @@ public class FullDetailsFragment extends Fragment implements ExoPlayer.EventList
         builder.setContentTitle(mStep.shortDescription)
                 .setContentText(getString(R.string.notification_text))
                 .setContentIntent(contentPendingIntent)
-                .setSmallIcon(R.drawable.brownies)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .addAction(rewindAction)
                 .addAction(playPauseAction)
