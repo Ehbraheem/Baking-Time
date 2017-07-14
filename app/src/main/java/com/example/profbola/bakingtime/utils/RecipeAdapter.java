@@ -15,6 +15,7 @@ import com.example.profbola.bakingtime.R;
 import com.example.profbola.bakingtime.models.Recipe;
 import com.example.profbola.bakingtime.ui.MainActivity;
 import com.example.profbola.bakingtime.ui.RecipeDetailActivity;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -90,8 +91,18 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
             mTitleView.setText(recipe.name);
             mServingsView.setText(RecipeUtils.formatServings(recipe.servings));
-            int id = RecipeUtils.getResourceIdFromName(mContext, recipe.image);
-            mRecipeImage.setImageResource(id);
+
+            if (recipe.image.isEmpty()) {
+                String imageUrl = recipe.name.replaceAll("\\s", "_").toLowerCase();
+                int id = RecipeUtils.getResourceIdFromName(mContext, imageUrl);
+                mRecipeImage.setImageResource(id);
+            } else {
+
+                Picasso.with(mContext)
+                        .load(recipe.image)
+                        .into(mRecipeImage);
+
+            }
         }
     }
 }
