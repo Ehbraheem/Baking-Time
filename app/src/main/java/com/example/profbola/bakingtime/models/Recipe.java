@@ -35,7 +35,7 @@ public class Recipe implements Parcelable, RecipeUtils.IsPersistable<Recipe> {
 
     public Recipe(JSONObject object) throws JSONException {
         name = object.getString(NAME_KEY);
-        image = object.getString(IMAGE_KEY).equals("") ? name.replaceAll("\\s", "_").toLowerCase() : object.getString(IMAGE_KEY);
+        image = object.getString(IMAGE_KEY);
         servings = object.getInt(SERVINGS_KEY);
         id = object.getInt(ID_KEY);
         JSONArray stepsJson = object.getJSONArray(STEPS_KEY);
