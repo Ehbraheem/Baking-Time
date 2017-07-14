@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -70,15 +71,19 @@ public class RecipeDetailActivity extends AppCompatActivity implements
         }
 
         if (savedInstanceState == null) {
-            Recipe recipe = (Recipe) getIntent().getExtras().get(RecipeConstants.RECIPE);
-            // FIXME: 7/8/2017 Register Loaders
-            mRecipe = recipe;
+            // FIXME: 7/13/2017 Add NULL Guard
+            Intent intent = getIntent();
+            if (intent != null && intent.hasExtra(RecipeConstants.RECIPE)) {
+                Recipe recipe = (Recipe) getIntent().getExtras().get(RecipeConstants.RECIPE);
+                // FIXME: 7/8/2017 Register Loaders
+                mRecipe = recipe;
 
-            mIngredientsFragment = new IngredientsFragment();
+                mIngredientsFragment = new IngredientsFragment();
 
-            mStepsFragment = new StepsFragment();
+                mStepsFragment = new StepsFragment();
 
-            setUpLoaders();
+                setUpLoaders();
+            }
         }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -87,11 +92,15 @@ public class RecipeDetailActivity extends AppCompatActivity implements
         getSupportActionBar().setTitle(mRecipe.name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
-        setUpViewPager(mIngredientsFragment, mStepsFragment);
-
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager, true);
+        if (mTwoPane) { // We are in Tablet view
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.steps_fragment, mStepsFragment)
+                    .add(R.id.ingrediens_fragment, mIngredientsFragment)
+                    .commit();
+        } else {
+            initViewPager();
+        }
 
     }
 
@@ -104,7 +113,14 @@ public class RecipeDetailActivity extends AppCompatActivity implements
 
         viewPager.setAdapter(adapter);
     }
-    
+
+    private void initViewPager() {
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        setUpViewPager(mIngredientsFragment, mStepsFragment);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager, true);
+    }
 
     @Override
     public void ingredientClicked(Ingredient ingredient) {
@@ -160,14 +176,14 @@ public class RecipeDetailActivity extends AppCompatActivity implements
             case INGREDIENT_LOADER_ID:
 //                mIngredientsFragment = new IngredientsFragment();
                 List<Ingredient> ingredients = Ingredient.convertCursor(data);
-                deliverDataToIngredientFragment(ingredients);
+                if (ingredients != null) deliverDataToIngredientFragment(ingredients);
 
                 break;
             
             case STEP_LOADER_ID:
 //                mStepsFragment = new StepsFragment();
                 List<Step> steps = Step.convertCursor(data);
-                deliverDataToStepFragment(steps);
+                if (steps != null) deliverDataToStepFragment(steps);
 
                 break;
             
@@ -198,22 +214,36 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     }
 
     private void deliverDataToIngredientFragment(List<Ingredient> ingredients) {
+        Object fragment;
+        if (mTwoPane) {
+            fragment = getSupportFragmentManager().findFragmentById(R.id.ingrediens_fragment);
+        } else {
+            fragment = viewPager.getAdapter().instantiateItem(viewPager, 0);
+        }
 
-        if (ingredients != null) {
-            mIngredientsFragment = (IngredientsFragment) viewPager.getAdapter().instantiateItem(viewPager, 0);
+        if (checkFragment(fragment, IngredientsFragment.class)) {
+            mIngredientsFragment = (IngredientsFragment) fragment;
             mIngredientsFragment.addData(ingredients.toArray(new Ingredient[ingredients.size()]));
             mIngredients = ingredients;
         }
     }
 
     private void deliverDataToStepFragment(List<Step> steps) {
+        Object fragment;
+        if (mTwoPane) {
+            fragment = getSupportFragmentManager().findFragmentById(R.id.steps_fragment);
+        } else {
+            fragment = viewPager.getAdapter().instantiateItem(viewPager, 1);
+        }
 
-        if (steps != null) {
-            mStepsFragment = (StepsFragment) viewPager.getAdapter().instantiateItem(viewPager, 1);
+        if (checkFragment(fragment, StepsFragment.class)) {
+            mStepsFragment = (StepsFragment) fragment;
             mStepsFragment.addData(steps.toArray(new Step[steps.size()]));
             mSteps = steps;
         }
+    }
 
-//        viewPager.getAdapter().notifyDataSetChanged();
+    private boolean checkFragment(Object fragmentToCheck, Class<? extends Fragment> klass) {
+        return klass.isInstance(fragmentToCheck);
     }
 }
