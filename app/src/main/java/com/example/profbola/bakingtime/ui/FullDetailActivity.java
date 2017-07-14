@@ -1,5 +1,6 @@
 package com.example.profbola.bakingtime.ui;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -14,14 +15,18 @@ public class FullDetailActivity extends AppCompatActivity {
 
         if (null == savedInstanceState) {
 
-            Bundle bundle = getIntent().getExtras();
+            // FIXME: 7/13/2017 Add NULL Guard
+            Intent intent = getIntent();
+            if (intent != null) {
+                Bundle bundle = getIntent().getExtras();
 
-            FullDetailsFragment fullDetailsFragment = new FullDetailsFragment();
-            fullDetailsFragment.setArguments(bundle);
+                FullDetailsFragment fullDetailsFragment = new FullDetailsFragment();
+                fullDetailsFragment.setArguments(bundle);
 
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.full_details, fullDetailsFragment)
-                    .commit();
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.full_details, fullDetailsFragment)
+                        .commit();
+            }
         }
     }
 }
