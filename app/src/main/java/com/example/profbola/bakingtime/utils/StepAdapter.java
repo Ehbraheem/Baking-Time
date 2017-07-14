@@ -48,16 +48,14 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepViewHolder
     public class StepViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
-        private final TextView id;
-        private final TextView description;
+        private final TextView shortDescription;
 
         private Step mStep;
 
         public StepViewHolder(View itemView) {
             super(itemView);
 
-            id = (TextView) itemView.findViewById(R.id.step_id);
-            description = (TextView) itemView.findViewById(R.id.step_description);
+            shortDescription = (TextView) itemView.findViewById(R.id.step_short_description);
 
             itemView.setOnClickListener(this);
         }
@@ -65,8 +63,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepViewHolder
         void bind(int position) {
             mStep = mSteps[position];
 
-            id.setText(String.valueOf(mStep.id));
-            description.setText(mStep.description);
+            shortDescription.setText(mStep.shortDescription);
         }
 
         @Override
