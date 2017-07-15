@@ -87,7 +87,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             Intent transportIntent = new Intent(mContext, RecipeDetailActivity.class);
             transportIntent.putExtra(RecipeConstants.RECIPE, mRecipe);
             mContext.startActivity(transportIntent);
-            RecipeService.startActionLastViewedRecipeIngredients(mContext, mRecipe);
         }
 
         void bind(Recipe recipe) {

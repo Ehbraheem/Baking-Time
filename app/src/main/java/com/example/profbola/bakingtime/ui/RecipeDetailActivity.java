@@ -83,6 +83,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
                 mStepsFragment = new StepsFragment();
 
                 setUpLoaders();
+                RecipeService.startActionLastViewedRecipeIngredients(this, mRecipe);
             }
         }
 
