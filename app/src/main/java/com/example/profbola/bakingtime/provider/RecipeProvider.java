@@ -13,6 +13,8 @@ import android.text.TextUtils;
 
 import com.example.profbola.bakingtime.provider.RecipeContract.*;
 
+import java.util.Arrays;
+
 import static com.example.profbola.bakingtime.utils.RecipeConstants.RecipeProviderConstants.*;
 
 /**
@@ -42,6 +44,14 @@ public class RecipeProvider extends ContentProvider {
         matcher.addURI(authority,
                 RecipeContract.PATH_RECIPES + "/#/" + RecipeContract.PATH_STEPS,
                 CODE_SINGLE_RECIPE_STEPS);
+
+        matcher.addURI(authority,
+                RecipeContract.PATH_RECIPES + "/#/" + RecipeContract.PATH_STEPS + "/#",
+                CODE_SINGLE_RECIPE_SINGLE_STEP);
+
+        matcher.addURI(authority,
+                RecipeContract.PATH_RECIPES + "/#/" + RecipeContract.PATH_INGREDIENTS + "/#",
+                CODE_SINGLE_RECIPE_SINGLE_INGREDIENT);
 
         return matcher;
     }
@@ -267,33 +277,45 @@ public class RecipeProvider extends ContentProvider {
         int numDeleted;
         final SQLiteDatabase db;
         int match = sUriMatcher.match(uri);
+        String recipeId;
 
         switch (match) {
 
-            case CODE_RECIPES:
+            case CODE_SINGLE_RECIPE:
 
                 db = dbHelper.getWritableDatabase();
+                String id = uri.getLastPathSegment();
+                String recipeSelection = makeSelection(RecipeEntry.COLUMN_ID);
+                String[] recipeSelectionArgs = makeSelectionArgs(id);
                 numDeleted = db.delete(RecipeEntry.TABLE_NAME,
-                        selection,
-                        selectionArgs
+                        recipeSelection,
+                        recipeSelectionArgs
                 );
                 break;
 
-            case CODE_SINGLE_RECIPE_INGREDIENTS:
+            case CODE_SINGLE_RECIPE_SINGLE_INGREDIENT:
 
                 db = dbHelper.getWritableDatabase();
+                recipeId = uri.getPathSegments().get(1);
+                String ingredientId = uri.getLastPathSegment();
+                String ingredientSelection = makeSelection(IngredientEntry.COLUMN_RECIPE_ID, IngredientEntry._ID);
+                String[] ingredientSelectionArgs = makeSelectionArgs(recipeId, ingredientId);
                 numDeleted = db.delete(IngredientEntry.TABLE_NAME,
-                        selection,
-                        selectionArgs
+                        ingredientSelection,
+                        ingredientSelectionArgs
                 );
                 break;
 
-            case CODE_SINGLE_RECIPE_STEPS:
+            case CODE_SINGLE_RECIPE_SINGLE_STEP:
 
                 db = dbHelper.getWritableDatabase();
+                recipeId = uri.getPathSegments().get(1);
+                String stepId = uri.getLastPathSegment();
+                String stepSelection = makeSelection(StepEntry.COLUMN_RECIPE_ID, StepEntry.COLUMN_ID);
+                String[] stepArgs = makeSelectionArgs(recipeId, stepId);
                 numDeleted = db.delete(StepEntry.TABLE_NAME,
-                        selection,
-                        selectionArgs
+                        stepSelection,
+                        stepArgs
                 );
                 break;
 
@@ -308,27 +330,92 @@ public class RecipeProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+
+        int numUpdated;
+        final SQLiteDatabase db;
+        int match = sUriMatcher.match(uri);
+        String recipeId;
+
+        switch (match) {
+
+            case CODE_SINGLE_RECIPE:
+
+                db = dbHelper.getWritableDatabase();
+                String id = uri.getLastPathSegment();
+                String recipeSelection = makeSelection(RecipeEntry.COLUMN_ID);
+                String[] recipeSelectionArgs = makeSelectionArgs(id);
+                numUpdated = db.update(RecipeEntry.TABLE_NAME,
+                        values,
+                        recipeSelection,
+                        recipeSelectionArgs
+                );
+                break;
+
+            case CODE_SINGLE_RECIPE_SINGLE_INGREDIENT:
+
+                db = dbHelper.getWritableDatabase();
+                recipeId = uri.getPathSegments().get(1);
+                String ingredientId = uri.getLastPathSegment();
+                String ingredientSelection = makeSelection(IngredientEntry.COLUMN_RECIPE_ID, IngredientEntry._ID);
+                String[] ingredientSelectionArgs = makeSelectionArgs(recipeId, ingredientId);
+                numUpdated = db.update(IngredientEntry.TABLE_NAME,
+                        values,
+                        ingredientSelection,
+                        ingredientSelectionArgs
+                );
+                break;
+
+            case CODE_SINGLE_RECIPE_SINGLE_STEP:
+
+                db = dbHelper.getWritableDatabase();
+                recipeId = uri.getPathSegments().get(1);
+                String stepId = uri.getLastPathSegment();
+                String stepSelection = makeSelection(StepEntry.COLUMN_RECIPE_ID, StepEntry.COLUMN_ID);
+                String[] stepArgs = makeSelectionArgs(recipeId, stepId);
+                numUpdated = db.update(StepEntry.TABLE_NAME,
+                        values,
+                        stepSelection,
+                        stepArgs
+                );
+                break;
+
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        if (numUpdated > 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return numUpdated;
     }
 
-    private String[] makeSelectionArgs(@NonNull Object args) {
-        return new String[]{String.valueOf(args)};
+    private String[] makeSelectionArgs(@NonNull Object... args) {
+        String[] result = new String[args.length];
+        for (int i = 0; i < args.length; i++) {
+            result[i] = String.valueOf(args[i]);
+        }
+
+        return result;
     }
 
     private String makeSelection(@NonNull String... args) {
-        String selection = TextUtils.join(", ", args);
-        int lenght = args.length;
-        String ques = "";
-        if (lenght == 1) {
-            ques = "?";
-        } else {
+        StringBuilder selectionBuilder = new StringBuilder();
+//        String selection = TextUtils.join(", ", args);
+        String ques = " = ?";
 
-            for (int i = 0; i < lenght; i++) {
-                ques += " ? ,";
+        int lenght = args.length;
+        if (lenght == 1) {
+            selectionBuilder.append(args[0]).append(ques);
+        } else {
+            for (String select : args) {
+                selectionBuilder = selectLogic(selectionBuilder, select, ques);
             }
         }
-        ques = ques.replace(",$", "");
 
-        return selection + " = " + ques;
+
+        return selectionBuilder.toString();
+    }
+
+    private StringBuilder selectLogic(StringBuilder builder, String select, String ques) {
+        return builder.toString().endsWith(" AND ") ? builder.append(select).append(ques) : builder.append(select).append(ques).append(" AND ");
     }
 }
