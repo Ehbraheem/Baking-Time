@@ -3,57 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
-    android:background="@color/widgetBackground">
+    android:orientation="vertical"
+    android:divider="?android:attr/dividerHorizontal"
+    android:showDividers="middle">
 
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/widget_recipe_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/cheesecake"
-            android:padding="4dp"
-            android:layout_alignParentTop="true"/>
-
-        <TextView
-            android:id="@+id/widget_recipe_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/widget_recipe_image"
-            android:textColor="@color/widgetTextColor"
-            tools:text="@string/recipe_title"
-            android:layout_marginTop="4dp"
-            android:layout_centerInParent="true"
-            android:textAppearance="?android:textAppearanceMediumInverse"/>
-
-        <TextView
-            android:id="@+id/widget_recipe_servings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/widget_recipe_name"
-            tools:text="@string/recipe_servings"
-            android:layout_centerInParent="true"
-            android:textColor="@color/textColorPrimary"
-            android:textAppearance="?android:textAppearanceSmall"/>
-
-    </RelativeLayout>
-    <!--<ImageView-->
-        <!--android:id="@+id/widget_sync_recipes"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center_horizontal"-->
-        <!--android:src="@drawable/ic_sync"/>-->
+    <TextView
+        android:id="@+id/recipe_widget_ingredinets_title"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/widgetBackground"
+        android:textAppearance="?actionBarTabTextStyle"
+        tools:text="@string/recipe_title"
+        android:textSize="22sp"
+        android:layout_marginBottom="@dimen/padding4"
+        android:layout_weight="1"/>
 
     <ListView
         android:id="@+id/widget_ingredients_listing"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="5"/>
 
 </LinearLayout>
