@@ -7,37 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/recipe_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="@string/recipe_title"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp" />
-
-        <TextView
-            android:id="@+id/recipe_servings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="@string/recipe_servings"
-            android:layout_marginTop="0dp"
-            android:layout_below="@+id/recipe_title"
-            android:layout_marginLeft="8dp" />
-
-        <ImageView
-            android:id="@+id/recipe_image"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            tools:background="@drawable/brownies"
-            android:layout_marginTop="8dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="8dp" />
-
-    </RelativeLayout>
+    <include
+        layout="@layout/recipe" />
 
 
 
