@@ -59,6 +59,9 @@ public final class RecipeConstants {
 
         public static final String UPDATE_RECIPE_WIDGET
                 = BASE_ACTION + "update_recipe_widget";
+
+        public static final String LAST_VIEWED_RECIPE_INGREDIENTS
+                = BASE_ACTION + "last_viewd_recipe_ingredients";
     }
 
     public static final class IngredientFragmentConstants {
@@ -112,6 +115,10 @@ public final class RecipeConstants {
         public static final int CODE_SINGLE_RECIPE_INGREDIENTS = 101100;
 
         public static final int CODE_SINGLE_RECIPE_STEPS = 101200;
+
+        public static final int CODE_SINGLE_RECIPE_SINGLE_STEP = 1012001;
+
+        public static final int CODE_SINGLE_RECIPE_SINGLE_INGREDIENT = 101101;
 
     }
 
