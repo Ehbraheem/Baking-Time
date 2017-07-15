@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.profbola.bakingtime.R;
 import com.example.profbola.bakingtime.models.Recipe;
+import com.example.profbola.bakingtime.services.RecipeService;
 import com.example.profbola.bakingtime.ui.MainActivity;
 import com.example.profbola.bakingtime.ui.RecipeDetailActivity;
 import com.squareup.picasso.Picasso;
@@ -79,11 +80,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
         @Override
         public void onClick(View v) {
-            Snackbar.make(v, "Congrats!!! You Just Clicked a cake!!!! Stay tuned for how to bake!!!", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+//            if (RecipeService.deleteIngredient(mContext)) {
+                Snackbar.make(v, "Congrats!!! You Just Clicked a cake!!!! Stay tuned for how to bake!!!", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+//            }
             Intent transportIntent = new Intent(mContext, RecipeDetailActivity.class);
             transportIntent.putExtra(RecipeConstants.RECIPE, mRecipe);
             mContext.startActivity(transportIntent);
+            RecipeService.startActionLastViewedRecipeIngredients(mContext, mRecipe);
         }
 
         void bind(Recipe recipe) {
@@ -93,8 +97,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             mServingsView.setText(RecipeUtils.formatServings(recipe.servings));
 
             if (recipe.image.isEmpty()) {
-                String imageUrl = recipe.name.replaceAll("\\s", "_").toLowerCase();
-                int id = RecipeUtils.getResourceIdFromName(mContext, imageUrl);
+                int id = RecipeUtils.getResourceIdFromName(mContext, recipe.name);
                 mRecipeImage.setImageResource(id);
             } else {
 
