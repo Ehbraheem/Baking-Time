@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.profbola.bakingtime.R;
 import com.example.profbola.bakingtime.models.Ingredient;
+import com.example.profbola.bakingtime.models.Recipe;
 import com.example.profbola.bakingtime.provider.RecipeContract;
 
 import static com.example.profbola.bakingtime.utils.RecipeConstants.RecipesWidgetProviderConstants.RECIPE_ID;
@@ -25,23 +26,25 @@ import static com.example.profbola.bakingtime.utils.RecipeConstants.RecipesWidge
 
 public class IngredientWidgetService extends RemoteViewsService{
 
+    public static void setRecipeId(int recipeId) {
+        IngredientAdapterFactory.mRecipeId = recipeId;
+    }
     @Override public RemoteViewsFactory onGetViewFactory(Intent intent) {
 
-        int recipeId = intent.getIntExtra(RECIPE_ID, 1);
-        return new IngredientAdapterFactory(this.getApplicationContext(), recipeId);
+        return new IngredientAdapterFactory(this.getApplicationContext());
 
     }
 }
 
 class IngredientAdapterFactory implements RemoteViewsService.RemoteViewsFactory {
 
-    private Context mContext;private int mRecipeId;private Cursor mIngredients;
+    private Context mContext;
+    public static int mRecipeId;
+    private Cursor mIngredients;
 
-    protected IngredientAdapterFactory(Context context, int recipeId) {
+    protected IngredientAdapterFactory(Context context) {
 
         mContext = context;
-
-        mRecipeId = recipeId;
 
     }
     @Override
@@ -54,8 +57,8 @@ class IngredientAdapterFactory implements RemoteViewsService.RemoteViewsFactory 
         mIngredients.moveToPosition(position);
         Ingredient ingredient = new Ingredient(mIngredients);
         views.setTextViewText(R.id.ingredient_name, ingredient.ingredient);
-        views.setTextViewText(R.id.measure, ingredient.measure);
-        views.setTextViewText(R.id.quantity, String.valueOf(ingredient.quantity));
+        views.setTextViewText(R.id.ingredient_measure, ingredient.measure);
+        views.setTextViewText(R.id.ingredient_quantity, String.valueOf(ingredient.quantity));
 
         return views;
     }
