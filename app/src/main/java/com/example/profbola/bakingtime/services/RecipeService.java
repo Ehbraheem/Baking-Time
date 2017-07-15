@@ -15,6 +15,7 @@ import com.example.profbola.bakingtime.models.Recipe;
 import com.example.profbola.bakingtime.models.Step;
 import com.example.profbola.bakingtime.provider.RecipeContract;
 import com.example.profbola.bakingtime.ui.RecipeDetailActivity;
+import com.example.profbola.bakingtime.ui.widget.IngredientWidgetService;
 import com.example.profbola.bakingtime.ui.widget.RecipesWidgetProvider;
 
 import org.json.JSONArray;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.profbola.bakingtime.provider.RecipeContract.RecipeEntry.CONTENT_URI;
+import static com.example.profbola.bakingtime.utils.RecipeConstants.RECIPE;
 import static com.example.profbola.bakingtime.utils.RecipeConstants.RecipeServiceConstants.*;
 
 /**
@@ -51,8 +53,19 @@ public class RecipeService extends IntentService {
                 handleActionGetAssociatedData(recipe);
             } else if (UPDATE_RECIPE_WIDGET.equals(action)) {
                 handleUpdateRecipeWidget();
+            } else if (LAST_VIEWED_RECIPE_INGREDIENTS.equals(action)) {
+                if (intent.hasExtra(RECIPE)) {
+                    Recipe recipe = intent.getParcelableExtra(RECIPE);
+                    handleLastViewedRecipeIngredients(recipe);
+                }
             }
         }
+    }
+
+    private void handleLastViewedRecipeIngredients(Recipe recipe) {
+        changeCurrentWidgetRecipeLastSeen(recipe);
+        startActionUpdateRecipeWidget(this);
+
     }
 
     private void handleUpdateRecipeWidget() {
@@ -62,7 +75,7 @@ public class RecipeService extends IntentService {
                 null,
                 null,
                 null,
-                RecipeContract.RecipeEntry.COLUMN_WIDGET_LAST_DISPLAYED //+ " DESC"
+                RecipeContract.RecipeEntry.COLUMN_WIDGET_LAST_DISPLAYED + " DESC"
         );
 
         if (cursor != null && cursor.getCount() > 0) {
@@ -72,14 +85,13 @@ public class RecipeService extends IntentService {
         }
 
         if (recipe != null) {
-            changeCurrentWidgetRecipeLastSeen(recipe);
 
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
             int[] widgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, RecipesWidgetProvider.class));
 
+            IngredientWidgetService.setRecipeId(recipe.id);
             appWidgetManager.notifyAppWidgetViewDataChanged(widgetIds, R.id.widget_ingredients_listing);
             appWidgetManager.notifyAppWidgetViewDataChanged(widgetIds, R.id.widget_grid_view);
-
             RecipesWidgetProvider.updateRecipeWidgets(this, appWidgetManager, widgetIds, recipe);
         }
     }
@@ -105,8 +117,8 @@ public class RecipeService extends IntentService {
         );
 
         if (checkCursors(ingCursor, stepCursor)) {
-            List<Step> steps = consumeStepCursor(stepCursor);
-            List<Ingredient> ingredients = consumeIngredientCursor(ingCursor);
+            List<Step> steps = Step.convertCursor(stepCursor);
+            List<Ingredient> ingredients = Ingredient.convertCursor(ingCursor);
             recipe.steps = steps.toArray(new Step[steps.size()]);
             recipe.ingredients = ingredients.toArray(new Ingredient[ingredients.size()]);
         }
@@ -116,12 +128,18 @@ public class RecipeService extends IntentService {
         RecipeTasks.writeRecipes(this);
     }
 
+    public static void startActionLastViewedRecipeIngredients(Context context, Recipe recipe) {
+        Intent intent = new Intent(context, RecipeService.class);
+        intent.setAction(LAST_VIEWED_RECIPE_INGREDIENTS);
+        intent.putExtra(RECIPE, recipe);
+        context.startService(intent);
+    }
+
     public static void startActionSyncRecipes(Context context) {
         Intent intent = new Intent(context, RecipeService.class);
         intent.setAction(ACTION_SYC_RECIPES);
         context.startService(intent);
     }
-
 
     public static void startActionUpdateRecipeWidget(Context context) {
         Intent intent = new Intent(context, RecipeService.class);
@@ -136,27 +154,6 @@ public class RecipeService extends IntentService {
         context.startService(intent);
     }
 
-    // FIXME: 7/5/2017 Remove redundancy by Using Generic
-
-    private List<Step> consumeStepCursor(Cursor cursor) {
-        List<Step> returnValue = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            returnValue.add(new Step(cursor));
-            cursor.moveToNext();
-        }
-
-        return returnValue;
-    }
-
-    private List<Ingredient> consumeIngredientCursor(Cursor cursor) {
-        List<Ingredient> returnValue = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            returnValue.add(new Ingredient(cursor));
-            cursor.moveToNext();
-        }
-
-        return returnValue;
-    }
 
     // FIXME: 7/5/2017 F**k Java does not support Truthy values
     private boolean checkCursors(Cursor ingCursor, Cursor stepCursor) {
@@ -166,12 +163,25 @@ public class RecipeService extends IntentService {
 
     private void changeCurrentWidgetRecipeLastSeen(Recipe recipe) {
         if (recipe != null) {
-            getContentResolver().update(
-                    CONTENT_URI,
-                    recipe.toContentValues(),
-                    RecipeContract.RecipeEntry.COLUMN_ID + " = ? ",
-                    new String[]{String.valueOf(recipe.id)}
-            );
+            Uri RECIPE_URI = CONTENT_URI.buildUpon()
+                    .appendPath(String.valueOf(recipe.id))
+                    .build();
+
+            getContentResolver()
+                    .update(RECIPE_URI,
+                            recipe.toContentValues(),
+                            null,
+                            null);
         }
+    }
+
+    // FIXME: 7/15/2017 Test ContentProvider delete
+    public static boolean deleteIngredient(Context context) {
+        Uri uri = RecipeContract.IngredientEntry.CONTENT_URI(1)
+                .buildUpon().appendPath(String.valueOf(1)).build();
+        int numDeleted = context.getContentResolver()
+                .delete(uri, null, null);
+
+        return numDeleted > 0;
     }
 }
