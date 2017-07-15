@@ -75,29 +75,31 @@ public class RecipesWidgetProvider extends AppWidgetProvider {
         int id = RecipeUtils.getResourceIdFromName(context, recipe.image);
         // TODO: 7/12/2017 Undo after review
 //        views.setImageViewResource(R.id.widget_recipe_image, id);
-//        views.setTextViewText(R.id.widget_recipe_name, recipe.name);
-//        views.setTextViewText(R.id.widget_recipe_servings, "served: " + String.valueOf(recipe.servings));
-        views.setViewVisibility(R.id.widget_recipe_image, View.GONE);
-        views.setViewVisibility(R.id.widget_recipe_name, View.GONE);
-        views.setViewVisibility(R.id.widget_recipe_servings, View.GONE);
+        views.setTextViewText(R.id.recipe_widget_ingredinets_title,
+                context.getString(R.string.recipe_widget_ingredients, recipe.name));
 
-        Intent intent = new Intent(context, RecipeDetailActivity.class);
-        intent.putExtra(RECIPE, recipe);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-        views.setOnClickPendingIntent(R.id.widget_recipe_image, pendingIntent);
+//        views.setTextViewText(R.id.widget_recipe_servings, "served: " + String.valueOf(recipe.servings));
+//        views.setViewVisibility(R.id.widget_recipe_image, View.GONE);
+//        views.setViewVisibility(R.id.widget_recipe_name, View.GONE);
+//        views.setViewVisibility(R.id.widget_recipe_servings, View.GONE);
+
+//        Intent intent = new Intent(context, RecipeDetailActivity.class);
+//        intent.putExtra(RECIPE, recipe);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+//        views.setOnClickPendingIntent(R.id.widget_recipe_image, pendingIntent);
 
         Intent ingredientIntent = new Intent(context, IngredientWidgetService.class);
-        intent.putExtra(RECIPE_ID, recipe.id);
+        ingredientIntent.putExtra(RECIPE_ID, recipe.id);
         views.setRemoteAdapter(R.id.widget_ingredients_listing, ingredientIntent);
 
-        Intent syncIntent = new Intent(context, RecipeService.class);
-        syncIntent.setAction(ACTION_SYC_RECIPES);
-        PendingIntent syncPendingIntent = PendingIntent.getService(
-                context,
-                0,
-                syncIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-        );
+//        Intent syncIntent = new Intent(context, RecipeService.class);
+//        syncIntent.setAction(ACTION_SYC_RECIPES);
+//        PendingIntent syncPendingIntent = PendingIntent.getService(
+//                context,
+//                0,
+//                syncIntent,
+//                PendingIntent.FLAG_UPDATE_CURRENT
+//        );
 
 
 //        views.setOnClickPendingIntent(R.id.widget_sync_recipes, syncPendingIntent);
