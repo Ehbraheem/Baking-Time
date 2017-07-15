@@ -15,7 +15,8 @@ import java.util.List;
 public class RecipeUtils {
 
     public static int getResourceIdFromName(Context context, String name) {
-        return context.getResources().getIdentifier(name, "drawable", context.getPackageName());
+        String imageUrl = name.replaceAll("\\s", "_").toLowerCase();
+        return context.getResources().getIdentifier(imageUrl, "drawable", context.getPackageName());
     }
 
     public static CharSequence formatServings(int servings) {
