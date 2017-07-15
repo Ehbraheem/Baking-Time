@@ -70,19 +70,19 @@ class GridRemoteViewFactory implements RemoteViewsService.RemoteViewsFactory {
         mCursor.moveToPosition(position);
         Recipe recipe = new Recipe(mCursor);
 
-        RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.recipes_widget_provider);
+        RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.recipe);
 
-        int imgRes = RecipeUtils.getResourceIdFromName(mContext, recipe.image);
-        views.setTextViewText(R.id.widget_recipe_name, recipe.name);
-        views.setTextViewText(R.id.widget_recipe_servings, RecipeUtils.formatServings(recipe.servings));
-        views.setImageViewResource(R.id.widget_recipe_image, imgRes);
-        views.setViewVisibility(R.id.widget_ingredients_listing, View.GONE);
+        int imgRes = RecipeUtils.getResourceIdFromName(mContext, recipe.name);
+        views.setTextViewText(R.id.recipe_title, recipe.name);
+        views.setTextViewText(R.id.recipe_servings, RecipeUtils.formatServings(recipe.servings));
+        views.setImageViewResource(R.id.recipe_image, imgRes);
+//        views.setViewVisibility(R.id.widget_ingredients_listing, View.GONE);
 //        views.setViewVisibility(R.id.widget_sync_recipes, View.GONE);
 
         Intent fillInIntent = new Intent();
         fillInIntent.putExtra(RECIPE, recipe);
 
-        views.setOnClickFillInIntent(R.id.widget_recipe_image, fillInIntent);
+        views.setOnClickFillInIntent(R.id.recipe_image, fillInIntent);
 
         return views;
     }
