@@ -140,4 +140,29 @@ public final class RecipeConstants {
 
     }
 
+    public static final class FullDetailsConstants {
+
+        public static final int PLAYBACK_DELTA = 3000;
+
+    }
+
+    public static final class RecipeActivityTestConstants {
+
+        public static final String CAKE_NAME = "Cheesecake";
+
+        public static final String INGREDIENT_NAME = "vanilla";
+
+        public static final String STEP_TITLE = "Add heavy cream and vanilla.";
+        public static final String FAST_FORWARD = "fast forward";
+        public static final String REWIND = "rewind";
+        public static final String FF_DESCRIPTION = "Fast forward";
+        public static final String RWD_DESCRIPTION = "Rewind";
+
+        public static final int RECIPE_POSITION = 3;
+
+        public static final int STEP_POSITION = 6;
+
+        public static final int VIDEO_DELTA = 03;
+    }
+
 }

@@ -45,6 +45,7 @@ import com.google.android.exoplayer2.util.Util;
 import com.squareup.picasso.Picasso;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
+import static com.example.profbola.bakingtime.utils.RecipeConstants.FullDetailsConstants.PLAYBACK_DELTA;
 import static com.example.profbola.bakingtime.utils.RecipeConstants.RecipeDetailsConstants.INGREDIENTS_KEY;
 import static com.example.profbola.bakingtime.utils.RecipeConstants.RecipeDetailsConstants.STEP_KEY;
 
@@ -190,6 +191,12 @@ public class FullDetailsFragment extends Fragment implements ExoPlayer.EventList
         } else if ((playbackState == ExoPlayer.STATE_READY)) {
             mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
                     mExoPlayer.getCurrentPosition(), 1f);
+        } else if (playbackState == PlaybackStateCompat.STATE_FAST_FORWARDING) {
+            mStateBuilder.setState(PlaybackStateCompat.STATE_FAST_FORWARDING,
+                    mExoPlayer.getCurrentPosition() + PLAYBACK_DELTA, 1f);
+        } else if (playbackState == PlaybackStateCompat.STATE_REWINDING) {
+            mStateBuilder.setState(PlaybackStateCompat.STATE_REWINDING,
+                    mExoPlayer.getCurrentPosition() - PLAYBACK_DELTA, 1f);
         }
 
         mMediaSession.setPlaybackState(mStateBuilder.build());
@@ -295,13 +302,13 @@ public class FullDetailsFragment extends Fragment implements ExoPlayer.EventList
         @Override
         public void onRewind() {
             long currentPostion = mExoPlayer.getCurrentPosition();
-            mExoPlayer.seekTo(currentPostion - 5000);
+            mExoPlayer.seekTo(currentPostion - PLAYBACK_DELTA);
         }
 
         @Override
         public void onFastForward() {
             long currentPostion = mExoPlayer.getCurrentPosition();
-            mExoPlayer.seekTo(currentPostion + 5000);
+            mExoPlayer.seekTo(currentPostion + PLAYBACK_DELTA);
         }
     }
 
