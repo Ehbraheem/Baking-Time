@@ -36,7 +36,7 @@ public class RecipesWidgetProvider extends AppWidgetProvider {
         int width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
         RemoteViews rv;
 
-        if (width < 300) {
+        if (width < 1800) {
             rv = getSingleRecipeRemoteViews(context, recipe);
         } else {
             rv = getBakersLogicGridRemoteViews(context);

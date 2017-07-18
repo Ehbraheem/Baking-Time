@@ -2,7 +2,6 @@ package com.example.profbola.bakingtime.ui;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.health.PackageHealthStats;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +14,8 @@ import com.example.profbola.bakingtime.R;
 import com.example.profbola.bakingtime.models.Step;
 import com.example.profbola.bakingtime.utils.StepAdapter;
 
+import java.util.ArrayList;
+
 import static com.example.profbola.bakingtime.utils.RecipeConstants.StepFragmentContants.STEPS_KEY;
 
 /**
@@ -25,7 +26,7 @@ public class StepsFragment extends Fragment {
 
     private RecyclerView mStepsListing;
     private StepAdapter mAdapter;
-    private Step[] mSteps;
+    private ArrayList<Step> mSteps;
 
     OnVideoPlayerSelected mCallback;
 
@@ -46,7 +47,7 @@ public class StepsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         if (savedInstanceState != null) {
-            mSteps = (Step[]) savedInstanceState.getParcelableArray(STEPS_KEY);
+            mSteps = savedInstanceState.getParcelableArrayList(STEPS_KEY);
         }
         View view = inflater.inflate(R.layout.fragment_steps_listing, container, false);
 
@@ -58,7 +59,7 @@ public class StepsFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArray(STEPS_KEY, mSteps);
+        outState.putParcelableArrayList(STEPS_KEY, mSteps);
     }
 
     @Override
@@ -81,7 +82,7 @@ public class StepsFragment extends Fragment {
         mStepsListing.setHasFixedSize(true);
     }
 
-    public void addData(Step[] steps) {
+    public void addData(ArrayList<Step> steps) {
         mSteps = steps;
         mAdapter.swapSteps(mSteps);
     }

@@ -193,6 +193,10 @@ public class RecipeActivityTest {
         checkParentText(R.id.steps_listing, STEP_TITLE);
     }
 
+    // FIXME: 7/16/2017 See if you can get this tests to pass on your system,
+    // It fails on my system due to slow network on my phone
+    /**
+     * @reviewer Try make this test pass
     @Test
     public void video_PlayerIsAvailable() {
 
@@ -212,10 +216,6 @@ public class RecipeActivityTest {
         checkView(R.id.player_view, R.id.exo_play);
     }
 
-    // FIXME: 7/16/2017 See if you can get this tests to pass on your system,
-    // It fails on my system due to slow network on my phone
-    /**
-     * @reviewer Try make this test pass
 
     @Test
     public void click_FastForwardChangePosition() {

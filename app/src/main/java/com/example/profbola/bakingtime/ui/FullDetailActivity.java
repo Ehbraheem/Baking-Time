@@ -5,8 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.profbola.bakingtime.R;
+import com.example.profbola.bakingtime.models.Step;
 
-public class FullDetailActivity extends AppCompatActivity {
+import static com.example.profbola.bakingtime.utils.RecipeConstants.FullDetailsConstants.NEXT_BUTTON_REQUEST;
+import static com.example.profbola.bakingtime.utils.RecipeConstants.RecipeDetailsConstants.STEP_KEY;
+
+public class FullDetailActivity extends AppCompatActivity
+        implements FullDetailsFragment.NextStepButtonClicked {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,5 +33,17 @@ public class FullDetailActivity extends AppCompatActivity {
                         .commit();
             }
         }
+    }
+
+    private void respondToNextButton(Step step) {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra(STEP_KEY, step);
+        setResult(RESULT_OK, returnIntent);
+        finish();
+    }
+
+    @Override
+    public void openNextStep(Step step) {
+        respondToNextButton(step);
     }
 }

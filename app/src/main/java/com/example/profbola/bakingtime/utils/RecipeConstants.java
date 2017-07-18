@@ -144,6 +144,8 @@ public final class RecipeConstants {
 
         public static final int PLAYBACK_DELTA = 3000;
 
+        public static final int NEXT_BUTTON_REQUEST = 4789;
+
     }
 
     public static final class RecipeActivityTestConstants {

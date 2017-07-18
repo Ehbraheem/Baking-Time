@@ -11,6 +11,8 @@ import com.example.profbola.bakingtime.R;
 import com.example.profbola.bakingtime.models.Ingredient;
 import com.example.profbola.bakingtime.ui.IngredientsFragment;
 
+import java.util.ArrayList;
+
 /**
  * Created by prof.BOLA on 7/2/2017.
  */
@@ -18,7 +20,7 @@ import com.example.profbola.bakingtime.ui.IngredientsFragment;
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder> {
 
     private Context mContext;
-    private Ingredient[] mIngredients;
+    private ArrayList<Ingredient> mIngredients;
     private IngredientsFragment.OnIngredientSelected mCallback;
 
     public IngredientAdapter(Context context, IngredientsFragment.OnIngredientSelected callback) {
@@ -42,7 +44,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
     @Override
     public int getItemCount() {
         if (null == mIngredients) return 0;
-        return mIngredients.length;
+        return mIngredients.size();
     }
 
     public class IngredientViewHolder extends RecyclerView.ViewHolder
@@ -65,7 +67,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
         }
 
         void bind(int position) {
-            mIngredient = mIngredients[position];
+            mIngredient = mIngredients.get(position);
             name.setText(mIngredient.ingredient);
             quantity.setText(String.valueOf(mIngredient.quantity));
             measure.setText(mIngredient.measure);
@@ -77,7 +79,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
         }
     }
 
-    public void swapIngredients(Ingredient[] ingredients) {
+    public void swapIngredients(ArrayList<Ingredient> ingredients) {
         mIngredients = ingredients;
         notifyDataSetChanged();
     }

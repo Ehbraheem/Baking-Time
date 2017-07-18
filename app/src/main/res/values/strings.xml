@@ -25,5 +25,6 @@
 
     <string name="recipe_widget_ingredients">%1$s\'s Ingredients</string>
     <string name="media_player">Recipe steps media player</string>
+    <string name="next_step">Next step</string>
 
 </resources>

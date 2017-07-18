@@ -25,11 +25,11 @@
             app:tabGravity="fill"/>
     </android.support.design.widget.AppBarLayout>
 
-    <include
-        layout="@layout/recipe_detail"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

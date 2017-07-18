@@ -14,6 +14,8 @@ import com.example.profbola.bakingtime.R;
 import com.example.profbola.bakingtime.models.Ingredient;
 import com.example.profbola.bakingtime.utils.IngredientAdapter;
 
+import java.util.ArrayList;
+
 import static com.example.profbola.bakingtime.utils.RecipeConstants.IngredientFragmentConstants.INGREDIENT_KEY;
 
 /**
@@ -24,7 +26,7 @@ public class IngredientsFragment extends Fragment {
 
     private RecyclerView mIngredientListing;
     private IngredientAdapter mAdapter;
-    private Ingredient[] mIngredients;
+    private ArrayList<Ingredient> mIngredients;
 
     OnIngredientSelected mCallback;
 
@@ -45,7 +47,7 @@ public class IngredientsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         if (savedInstanceState != null) {
-            mIngredients = (Ingredient[]) savedInstanceState.getParcelableArray(INGREDIENT_KEY);
+            mIngredients = savedInstanceState.getParcelableArrayList(INGREDIENT_KEY);
         }
         View view = inflater.inflate(R.layout.fragment_ingredients_listing, container, false);
 
@@ -57,7 +59,7 @@ public class IngredientsFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArray(INGREDIENT_KEY, mIngredients);
+        outState.putParcelableArrayList(INGREDIENT_KEY, mIngredients);
     }
 
     @Override
@@ -82,7 +84,7 @@ public class IngredientsFragment extends Fragment {
         mAdapter.swapIngredients(mIngredients);
     }
 
-    public void addData(Ingredient[] ingredients) {
+    public void addData(ArrayList<Ingredient> ingredients) {
         mIngredients = ingredients;
         mAdapter.swapIngredients(mIngredients);
     }

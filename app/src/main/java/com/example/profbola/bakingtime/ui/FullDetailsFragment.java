@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.NotificationCompat;
 import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -18,6 +19,7 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,10 +71,20 @@ public class FullDetailsFragment extends Fragment implements ExoPlayer.EventList
     private Step mStep;
     private Ingredient mIngredient;
 
+    private NextStepButtonClicked mNextVideoCallback;
+
+    public interface NextStepButtonClicked {
+        void openNextStep(Step step);
+    }
+
     public static final String TAG = FullDetailsFragment.class.getName();
 
     public FullDetailsFragment(){
     }
+
+//    public void setmNextVideoCallback(NextStepButtonClicked nextButton) {
+//        this.mNextVideoCallback = nextButton;
+//    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,6 +110,18 @@ public class FullDetailsFragment extends Fragment implements ExoPlayer.EventList
         Toast.makeText(mContext, "It Worked!!!", Toast.LENGTH_SHORT).show();
 
         return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            mNextVideoCallback = (NextStepButtonClicked) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement NextStepButtonClicked");
+        }
     }
 
     @Override
@@ -128,6 +152,9 @@ public class FullDetailsFragment extends Fragment implements ExoPlayer.EventList
         view.findViewById(R.id.player_view).setVisibility(View.VISIBLE);
         view.findViewById(R.id.ingredient_view).setVisibility(View.GONE);
 
+        Button nextStep = (Button) view.findViewById(R.id.next_step);
+        if (nextStep != null) setUpNextStepButton(nextStep);
+
         TextView descriptionView = (TextView) view.findViewById(R.id.step_description);
         if (descriptionView != null) descriptionView.setText(mStep.description);
 
@@ -139,8 +166,18 @@ public class FullDetailsFragment extends Fragment implements ExoPlayer.EventList
         }
         if (!mStep.thumbnailURL.isEmpty()) {
             ImageView mThumbnailView = (ImageView) view.findViewById(R.id.stepThumbnail);
+            mThumbnailView.setVisibility(View.VISIBLE);
             if (mThumbnailView != null) Picasso.with(mContext).load(mStep.thumbnailURL).into(mThumbnailView);
         }
+    }
+
+    private void setUpNextStepButton(Button nextStep) {
+        nextStep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mNextVideoCallback.openNextStep(mStep);
+            }
+        });
     }
 
     private void initializePlayer(Uri mediaUri) {

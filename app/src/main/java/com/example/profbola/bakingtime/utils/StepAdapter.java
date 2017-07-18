@@ -11,6 +11,8 @@ import com.example.profbola.bakingtime.R;
 import com.example.profbola.bakingtime.models.Step;
 import com.example.profbola.bakingtime.ui.StepsFragment;
 
+import java.util.List;
+
 /**
  * Created by prof.BOLA on 7/2/2017.
  */
@@ -18,7 +20,7 @@ import com.example.profbola.bakingtime.ui.StepsFragment;
 public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepViewHolder> {
 
     private Context mContext;
-    private Step[] mSteps;
+    private List<Step> mSteps;
     private StepsFragment.OnVideoPlayerSelected mCallback;
 
     public StepAdapter(Context context, StepsFragment.OnVideoPlayerSelected playerSelected) {
@@ -42,7 +44,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepViewHolder
     @Override
     public int getItemCount() {
         if (null == mSteps) return 0;
-        return mSteps.length;
+        return mSteps.size();
     }
 
     public class StepViewHolder extends RecyclerView.ViewHolder
@@ -61,7 +63,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepViewHolder
         }
 
         void bind(int position) {
-            mStep = mSteps[position];
+            mStep = mSteps.get(position);
 
             shortDescription.setText(mStep.shortDescription);
         }
@@ -72,7 +74,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepViewHolder
         }
     }
 
-    public void swapSteps(Step[] steps) {
+    public void swapSteps(List<Step> steps) {
         mSteps = steps;
         notifyDataSetChanged();
     }

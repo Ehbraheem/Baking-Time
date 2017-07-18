@@ -23,11 +23,13 @@ import com.example.profbola.bakingtime.models.Recipe;
 import com.example.profbola.bakingtime.models.Step;
 import com.example.profbola.bakingtime.provider.RecipeContract;
 import com.example.profbola.bakingtime.services.RecipeService;
-import com.example.profbola.bakingtime.utils.RecipeConstants;
 import com.example.profbola.bakingtime.utils.RecipePagerAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.profbola.bakingtime.utils.RecipeConstants.FullDetailsConstants.NEXT_BUTTON_REQUEST;
+import static com.example.profbola.bakingtime.utils.RecipeConstants.RECIPE;
 import static com.example.profbola.bakingtime.utils.RecipeConstants.RecipeDetailsConstants.*;
 
 /**
@@ -37,6 +39,7 @@ import static com.example.profbola.bakingtime.utils.RecipeConstants.RecipeDetail
 public class RecipeDetailActivity extends AppCompatActivity implements
         IngredientsFragment.OnIngredientSelected,
         StepsFragment.OnVideoPlayerSelected,
+        FullDetailsFragment.NextStepButtonClicked,
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private Toolbar toolbar;
@@ -73,8 +76,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements
         if (savedInstanceState == null) {
             // FIXME: 7/13/2017 Add NULL Guard
             Intent intent = getIntent();
-            if (intent != null && intent.hasExtra(RecipeConstants.RECIPE)) {
-                Recipe recipe = (Recipe) getIntent().getExtras().get(RecipeConstants.RECIPE);
+            if (intent != null && intent.hasExtra(RECIPE)) {
+                Recipe recipe = (Recipe) getIntent().getExtras().get(RECIPE);
                 // FIXME: 7/8/2017 Register Loaders
                 mRecipe = recipe;
 
@@ -85,6 +88,18 @@ public class RecipeDetailActivity extends AppCompatActivity implements
                 setUpLoaders();
                 RecipeService.startActionLastViewedRecipeIngredients(this, mRecipe);
             }
+
+            if (mTwoPane) { // We are in Tablet view
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.steps_fragment, mStepsFragment)
+                        .add(R.id.ingrediens_fragment, mIngredientsFragment)
+                        .commit();
+            } else {
+                initViewPager();
+            }
+        } else {
+            mRecipe = savedInstanceState.getParcelable(RECIPE);
         }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -93,15 +108,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements
         getSupportActionBar().setTitle(mRecipe.name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if (mTwoPane) { // We are in Tablet view
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.steps_fragment, mStepsFragment)
-                    .add(R.id.ingrediens_fragment, mIngredientsFragment)
-                    .commit();
-        } else {
-            initViewPager();
-        }
 
     }
 
@@ -135,18 +141,27 @@ public class RecipeDetailActivity extends AppCompatActivity implements
 
     private void routeToFragmentOrActivity(Parcelable object, String type) {
         if (mTwoPane) {
-            FullDetailsFragment newFragment = new FullDetailsFragment();
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(type, object);
-            newFragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.recipe_full_view, newFragment)
-                    .commit();
+            routeToFragment(object, type);
         } else {
-            Intent intent = new Intent(this, FullDetailActivity.class);
-            intent.putExtra(type, object);
-            startActivity(intent);
+            routeToActivity(object, type);
         }
+    }
+
+    private void routeToFragment(Parcelable object, String type) {
+        FullDetailsFragment newFragment = new FullDetailsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(type, object);
+        newFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.recipe_full_view, newFragment)
+                .commit();
+    }
+
+    private void routeToActivity(Parcelable object, String type) {
+        Intent intent = new Intent(this, FullDetailActivity.class);
+        startActivityForResult(intent, NEXT_BUTTON_REQUEST);
+        intent.putExtra(type, object);
+        startActivity(intent);
     }
 
     @Override
@@ -175,14 +190,12 @@ public class RecipeDetailActivity extends AppCompatActivity implements
 
         switch (loader.getId()) {
             case INGREDIENT_LOADER_ID:
-//                mIngredientsFragment = new IngredientsFragment();
                 List<Ingredient> ingredients = Ingredient.convertCursor(data);
                 if (ingredients != null) deliverDataToIngredientFragment(ingredients);
 
                 break;
             
             case STEP_LOADER_ID:
-//                mStepsFragment = new StepsFragment();
                 List<Step> steps = Step.convertCursor(data);
                 if (steps != null) deliverDataToStepFragment(steps);
 
@@ -224,7 +237,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements
 
         if (checkFragment(fragment, IngredientsFragment.class)) {
             mIngredientsFragment = (IngredientsFragment) fragment;
-            mIngredientsFragment.addData(ingredients.toArray(new Ingredient[ingredients.size()]));
+            mIngredientsFragment.addData((ArrayList<Ingredient>) ingredients);
             mIngredients = ingredients;
         }
     }
@@ -239,12 +252,46 @@ public class RecipeDetailActivity extends AppCompatActivity implements
 
         if (checkFragment(fragment, StepsFragment.class)) {
             mStepsFragment = (StepsFragment) fragment;
-            mStepsFragment.addData(steps.toArray(new Step[steps.size()]));
+            mStepsFragment.addData((ArrayList<Step>) steps);
             mSteps = steps;
         }
     }
 
     private boolean checkFragment(Object fragmentToCheck, Class<? extends Fragment> klass) {
         return klass.isInstance(fragmentToCheck);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(RECIPE, mRecipe);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void openNextStep(Step step) {
+        Step newStep = provideNextInLine(step);
+        routeToFragment(newStep, STEP_KEY);
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (NEXT_BUTTON_REQUEST == requestCode) {
+            if (resultCode == RESULT_OK) {
+                Step parcelableExtra = data.getParcelableExtra(STEP_KEY);
+                Step step = provideNextInLine(parcelableExtra);
+                routeToActivity(step, STEP_KEY);
+            }
+        }
+    }
+
+    private Step provideNextInLine(Step step) {
+        int index = mSteps.indexOf(step) + 1;
+        if (index < (mSteps.size() - 1)  && index >= 0) {
+            return mSteps.get(index);
+        } else {
+            return mSteps.get(0);
+        }
     }
 }
