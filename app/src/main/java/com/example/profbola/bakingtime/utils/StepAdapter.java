@@ -54,6 +54,8 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepViewHolder
 
         private Step mStep;
 
+        private int position;
+
         public StepViewHolder(View itemView) {
             super(itemView);
 
@@ -64,13 +66,14 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepViewHolder
 
         void bind(int position) {
             mStep = mSteps.get(position);
+            this.position = position;
 
             shortDescription.setText(mStep.shortDescription);
         }
 
         @Override
         public void onClick(View v) {
-            mCallback.videoClicked(mStep);
+            mCallback.videoClicked(position);
         }
     }
 

@@ -56,6 +56,8 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
 
         private Ingredient mIngredient;
 
+        private int position;
+
         public IngredientViewHolder(View itemView) {
             super(itemView);
 
@@ -71,11 +73,12 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
             name.setText(mIngredient.ingredient);
             quantity.setText(String.valueOf(mIngredient.quantity));
             measure.setText(mIngredient.measure);
+            this.position = position;
         }
 
         @Override
         public void onClick(View v) {
-            mCallback.ingredientClicked(mIngredient);
+            mCallback.ingredientClicked(position);
         }
     }
 

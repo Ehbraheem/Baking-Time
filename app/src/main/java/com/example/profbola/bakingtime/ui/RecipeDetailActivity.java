@@ -130,25 +130,26 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void ingredientClicked(Ingredient ingredient) {
-        routeToFragmentOrActivity(ingredient, INGREDIENTS_KEY);
+    public void ingredientClicked(int position) {
+        routeToFragmentOrActivity(position, INGREDIENTS_KEY);
     }
 
     @Override
-    public void videoClicked(Step step) {
-        routeToFragmentOrActivity(step, STEP_KEY);
+    public void videoClicked(int position) {
+        routeToFragmentOrActivity(position, STEP_KEY);
     }
 
-    private void routeToFragmentOrActivity(Parcelable object, String type) {
+    private void routeToFragmentOrActivity(int position, String type) {
         if (mTwoPane) {
-            routeToFragment(object, type);
+            routeToFragment(position, type);
         } else {
-            routeToActivity(object, type);
+            routeToActivity(type, position);
         }
     }
 
-    private void routeToFragment(Parcelable object, String type) {
+    private void routeToFragment(int position, String type) {
         FullDetailsFragment newFragment = new FullDetailsFragment();
+        Parcelable object = type.equals(STEP_KEY) ? mSteps.get(position) : mIngredients.get(position);
         Bundle bundle = new Bundle();
         bundle.putParcelable(type, object);
         newFragment.setArguments(bundle);
@@ -157,10 +158,21 @@ public class RecipeDetailActivity extends AppCompatActivity implements
                 .commit();
     }
 
-    private void routeToActivity(Parcelable object, String type) {
+    private void routeToActivity(String type, int position) {
+        List<? extends Parcelable> objects;
+        String indexKey;
+
+        if (type.equals(STEP_KEY)) {
+            objects = mSteps;
+            indexKey = STEP_INDEX;
+        } else {
+            objects = mIngredients;
+            indexKey = INGREDIENT_INDEX;
+        }
         Intent intent = new Intent(this, FullDetailActivity.class);
         startActivityForResult(intent, NEXT_BUTTON_REQUEST);
-        intent.putExtra(type, object);
+        intent.putExtra(type, (ArrayList<Parcelable>) objects);
+        intent.putExtra(indexKey, position);
         startActivity(intent);
     }
 
@@ -269,29 +281,29 @@ public class RecipeDetailActivity extends AppCompatActivity implements
 
     @Override
     public void openNextStep(Step step) {
-        Step newStep = provideNextInLine(step);
-        routeToFragment(newStep, STEP_KEY);
+        int nextInLine = provideNextInLine(step, mSteps);
+        routeToFragment(nextInLine, STEP_KEY);
     }
 
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (NEXT_BUTTON_REQUEST == requestCode) {
-            if (resultCode == RESULT_OK) {
-                Step parcelableExtra = data.getParcelableExtra(STEP_KEY);
-                Step step = provideNextInLine(parcelableExtra);
-                routeToActivity(step, STEP_KEY);
-            }
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (NEXT_BUTTON_REQUEST == requestCode) {
+//            if (resultCode == RESULT_OK) {
+//                Step parcelableExtra = data.getParcelableExtra(STEP_KEY);
+//                Step step = provideNextInLine(parcelableExtra);
+//                routeToActivity(step, STEP_KEY);
+//            }
+//        }
+//    }
 
-    private Step provideNextInLine(Step step) {
-        int index = mSteps.indexOf(step) + 1;
-        if (index < (mSteps.size() - 1)  && index >= 0) {
-            return mSteps.get(index);
+    public static int provideNextInLine(Step step, List<Step> steps) {
+        int index = steps.indexOf(step) + 1;
+        if (index < (steps.size() - 1)  && index >= 0) {
+            return index;
         } else {
-            return mSteps.get(0);
+            return 0;
         }
     }
 }

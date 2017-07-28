@@ -31,7 +31,7 @@ public class StepsFragment extends Fragment {
     OnVideoPlayerSelected mCallback;
 
     public interface OnVideoPlayerSelected {
-        void videoClicked(Step step);
+        void videoClicked(int position);
     }
 
     public StepsFragment() {

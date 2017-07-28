@@ -31,7 +31,7 @@ public class IngredientsFragment extends Fragment {
     OnIngredientSelected mCallback;
 
     public interface OnIngredientSelected {
-        void ingredientClicked(Ingredient ingredient);
+        void ingredientClicked(int position);
     }
 
     public IngredientsFragment() {

@@ -29,6 +29,9 @@ public final class RecipeConstants {
         public static final String INGREDIENT_TAB = "ingredients";
         public static final String STEP_TAB = "steps";
 
+        public static final String STEP_INDEX = "step_index";
+        public static final String INGREDIENT_INDEX = "ingredient_index";
+
     }
 
     public static final class RecipesConstants {
