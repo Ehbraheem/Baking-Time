@@ -32,6 +32,9 @@ public final class RecipeConstants {
         public static final String STEP_INDEX = "step_index";
         public static final String INGREDIENT_INDEX = "ingredient_index";
 
+        public static final String STEP_INSTANCE_STATE = "step_state";
+        public static final String INGREDIENT_INSTANCE_STATE = "ingredient_state";
+
     }
 
     public static final class RecipesConstants {

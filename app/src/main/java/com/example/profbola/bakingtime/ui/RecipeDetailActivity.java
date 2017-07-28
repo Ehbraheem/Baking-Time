@@ -100,6 +100,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements
             }
         } else {
             mRecipe = savedInstanceState.getParcelable(RECIPE);
+            mIngredients = savedInstanceState.getParcelableArrayList(INGREDIENT_INSTANCE_STATE);
+            mSteps = savedInstanceState.getParcelableArrayList(STEP_INSTANCE_STATE);
         }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -276,6 +278,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(RECIPE, mRecipe);
+        outState.putParcelableArrayList(INGREDIENT_INSTANCE_STATE, (ArrayList<Ingredient>) mIngredients);
+        outState.putParcelableArrayList(STEP_INSTANCE_STATE, (ArrayList<Step>) mSteps);
         super.onSaveInstanceState(outState);
     }
 
@@ -286,18 +290,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     }
 
 
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (NEXT_BUTTON_REQUEST == requestCode) {
-//            if (resultCode == RESULT_OK) {
-//                Step parcelableExtra = data.getParcelableExtra(STEP_KEY);
-//                Step step = provideNextInLine(parcelableExtra);
-//                routeToActivity(step, STEP_KEY);
-//            }
-//        }
-//    }
-
     public static int provideNextInLine(Step step, List<Step> steps) {
         int index = steps.indexOf(step) + 1;
         if (index < (steps.size() - 1)  && index >= 0) {
@@ -306,4 +298,5 @@ public class RecipeDetailActivity extends AppCompatActivity implements
             return 0;
         }
     }
+
 }
