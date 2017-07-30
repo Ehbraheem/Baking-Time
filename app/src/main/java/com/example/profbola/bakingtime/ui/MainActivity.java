@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity
         if (savedInstanceState == null ) {
             startSync(findViewById(R.id.fab));
             mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
-            getSupportLoaderManager().initLoader(RecipeConstants.RECIPE_LOADER_ID, null, this);
         }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -66,7 +65,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mLoadingIndicator.setVisibility(View.GONE);
+        if (mLoadingIndicator != null) mLoadingIndicator.setVisibility(View.GONE);
         switch (loader.getId()) {
 
             case RecipeConstants.RECIPE_LOADER_ID:
@@ -92,4 +91,16 @@ public class MainActivity extends AppCompatActivity
 //        super.onSaveInstanceState(outState);
 //        outState.put(RECIPE, mCursor);
 //    }
+
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        android.content.Loader<Cursor> loader = getLoaderManager().getLoader(RecipeConstants.RECIPE_LOADER_ID);
+        if (loader==null) {
+            getSupportLoaderManager().initLoader(RecipeConstants.RECIPE_LOADER_ID, null, this);
+        }else {
+            getSupportLoaderManager().restartLoader(RecipeConstants.RECIPE_LOADER_ID, null, this);
+        }
+    }
 }
