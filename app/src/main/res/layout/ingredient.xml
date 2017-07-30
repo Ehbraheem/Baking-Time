@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/ingredient_name"
@@ -12,7 +12,7 @@
         tools:text="@string/recipe_title"
         android:paddingTop="@dimen/padding4"
         android:layout_marginLeft="4dp"
-        android:textAppearance="?actionBarWidgetTheme"/>
+        android:textAppearance="?android:textAppearanceLarge"/>
 
     <TextView
         android:id="@+id/ingredient_quantity"
