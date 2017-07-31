@@ -30,7 +30,7 @@ public class IngredientDbHelper {
                 " FOREIGN KEY ( " + IngredientEntry.COLUMN_RECIPE_ID + " ) REFERENCES "                         +
                 RecipeContract.RecipeEntry.TABLE_NAME + " ( " + RecipeContract.RecipeEntry.COLUMN_ID + " ) "   +
 
-                " UNIQUE ( " + IngredientEntry.COLUMN_INGREDIENT + " ) ON CONFLICT REPLACE "                   +
+                " UNIQUE ( " + IngredientEntry.COLUMN_INGREDIENT + " , " + IngredientEntry.COLUMN_RECIPE_ID +  " ) ON CONFLICT REPLACE "                   +
                 ");";
 
         final String SQL_CREATE_INDEX

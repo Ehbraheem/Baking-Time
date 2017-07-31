@@ -122,7 +122,7 @@ public class Recipe implements Parcelable, RecipeUtils.IsPersistable<Recipe> {
             cursor.moveToPosition(i);
             recipes.add(new Recipe(cursor));
         }
-        cursor.close();
+//        cursor.close();
         return recipes;
     }
 

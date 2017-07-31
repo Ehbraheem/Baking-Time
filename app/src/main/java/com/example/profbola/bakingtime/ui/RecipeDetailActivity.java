@@ -237,8 +237,14 @@ public class RecipeDetailActivity extends AppCompatActivity implements
     }
 
     private void setUpLoaders() {
-        getSupportLoaderManager().initLoader(STEP_LOADER_ID, null, this);
-        getSupportLoaderManager().initLoader(INGREDIENT_LOADER_ID, null, this);
+        android.content.Loader<Cursor> loader = getLoaderManager().getLoader(INGREDIENT_LOADER_ID);
+        if (loader==null) {
+            getSupportLoaderManager().initLoader(STEP_LOADER_ID, null, this);
+            getSupportLoaderManager().initLoader(INGREDIENT_LOADER_ID, null, this);
+        }else {
+            getSupportLoaderManager().restartLoader(STEP_LOADER_ID, null, this);
+            getSupportLoaderManager().restartLoader(INGREDIENT_LOADER_ID, null, this);
+        }
     }
 
     private void deliverDataToIngredientFragment(List<Ingredient> ingredients) {
@@ -297,6 +303,12 @@ public class RecipeDetailActivity extends AppCompatActivity implements
         } else {
             return 0;
         }
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+
     }
 
 }
